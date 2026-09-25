@@ -100,6 +100,14 @@ int main(void)
     HAL_GPIO_WritePin(GPIOA, LED_GREEN_Pin, GPIO_PIN_SET);
 
     HAL_Delay(5000);
+    
+
+    /* GREEN light: Green ON, others OFF */
+    HAL_GPIO_WritePin(GPIOA, LED_RED_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, LED_YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, LED_GREEN_Pin, GPIO_PIN_RESET);
+
+    HAL_Delay(3000);
 
 
     /* YELLOW light: Yellow ON, others OFF */
@@ -108,14 +116,6 @@ int main(void)
     HAL_GPIO_WritePin(GPIOA, LED_GREEN_Pin, GPIO_PIN_SET);
 
     HAL_Delay(2000);
-
-
-    /* GREEN light: Green ON, others OFF */
-    HAL_GPIO_WritePin(GPIOA, LED_RED_Pin, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOA, LED_YELLOW_Pin, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOA, LED_GREEN_Pin, GPIO_PIN_RESET);
-
-    HAL_Delay(3000);
 }
   /* USER CODE END 3 */
 }
