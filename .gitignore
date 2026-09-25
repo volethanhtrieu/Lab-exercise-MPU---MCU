@@ -3,6 +3,7 @@
 
 # Keep this file
 !/.gitignore
+!/README.md
 
 # Include only Lab 01
 !/lab01/
