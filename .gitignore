@@ -1,0 +1,9 @@
+# Ignore everything in the Lab root
+/*
+
+# Keep this file
+!/.gitignore
+
+# Include only Lab 01
+!/lab01/
+!/lab01/**
