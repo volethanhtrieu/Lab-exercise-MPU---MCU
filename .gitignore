@@ -8,4 +8,6 @@
 # Include only Lab 01
 !/lab01/
 !/lab01/**
+!/lab02/
+!/lab02/**
 *.tex
