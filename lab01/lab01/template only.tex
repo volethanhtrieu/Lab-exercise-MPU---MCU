@@ -1,0 +1,619 @@
+\documentclass[a4paper]{article}
+
+% --- Gói ngôn ngữ và font ---
+\usepackage{vntex}             % Hỗ trợ tiếng Việt
+\usepackage[english]{babel}    % Hỗ trợ tiếng Anh (tùy chọn)
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{indentfirst} % Ép buộc thụt đầu dòng đoạn đầu tiên
+
+% --- Gói hình ảnh và màu sắc ---
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{xcolor} % Dùng xcolor thay cho color để mạnh mẽ hơn
+\usepackage{svg}
+\usepackage{tikz}
+\usetikzlibrary{arrows,snakes,backgrounds}
+\usepackage[framemethod=tikz]{mdframed}
+
+% --- Gói định dạng trang và bảng ---
+\usepackage{geometry}
+\usepackage{a4wide}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hhline}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{lastpage}
+\usepackage{placeins}
+\usepackage{setspace}
+\usepackage[skip=0pt]{caption}
+\usepackage{float} % Để cố định hình ảnh với [H]
+
+% --- Gói code và thuật toán ---
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\usepackage{minted} % Yêu cầu -shell-escape
+
+% --- Các gói khác ---
+\usepackage{blindtext}
+\usepackage{comment}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+% --- Cấu hình link ---
+\hypersetup{
+    urlcolor=blue,
+    linkcolor=black,
+    citecolor=black,
+    colorlinks=true
+}
+
+% --- Định nghĩa màu sắc ---
+\setlength{\columnseprule}{1pt}
+\def\columnseprulecolor{\color{black}}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{ReportNavy}{HTML}{102A43}
+\definecolor{ReportCyan}{HTML}{32B5D2}
+\definecolor{CodeBackground}{HTML}{F6F8FA}
+\definecolor{CodeFrame}{HTML}{CBD5E1}
+\definecolor{CodeComment}{HTML}{2E7D32}
+\definecolor{CodeKeyword}{HTML}{005CC5}
+\definecolor{CodeString}{HTML}{B31D28}
+\definecolor{CodeNumber}{HTML}{64748B}
+
+\newcommand{\exerciseOneURL}{https://github.com/USERNAME/REPOSITORY}
+\newcommand{\exerciseTwoURL}{https://github.com/USERNAME/REPOSITORY}
+\newcommand{\exerciseThreeURL}{https://github.com/USERNAME/REPOSITORY}
+
+% --- Cấu hình Minted (C++) ---
+\usemintedstyle{vs}
+\setminted[cpp]{
+    breaklines=true,
+    mathescape=true,
+    linenos=true,
+    fontsize=\small,
+    numbersep=3pt,
+    bgcolor=pink!5,
+    frame=single,
+    framerule=0.5pt,
+    rulecolor=pink!200
+}
+
+% --- Cấu hình Header/Footer ---
+\everymath{\color{blue}}
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{
+    \begin{tabular}{rl}
+        \begin{picture}(25,15)(0,0)
+            \put(0,-8){\includegraphics[width=8mm, height=8mm]{hcmut.png}}
+        \end{picture}&
+        \begin{tabular}{l}
+            \textbf{\ttfamily University of Technology}\\
+            \textbf{\ttfamily Faculty of Computer Science and Engineering}
+        \end{tabular} 	
+    \end{tabular}
+}
+\fancyhead[R]{} % Bên phải header để trống
+
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\scriptsize \ttfamily \textcolor{blue}{Discrete Structure (CO1007) Assignment, Semester 1, Academic year 2025-2026}}
+\fancyfoot[R]{\scriptsize \ttfamily Page {\thepage}/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+% --- Cấu hình Mục lục ---
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{0pt}
+
+\begin{document}
+
+% --- TRANG BÌA ---
+\begin{titlepage}
+\begin{center}
+    \Large Vietnam National University, Ho Chi Minh City \\
+    \Large University of Technology \\
+    \Large Faculty of Computer Science and Engineering 
+\end{center}
+
+\vspace{1cm}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=4cm]{hcmut.png}
+    \end{center}
+\end{figure}
+
+\vspace{1cm}
+
+\begin{center}
+    \begin{tabular}{c}
+    \multicolumn{1}{l}{\textbf{{\Large Microprocessors-Microcontrollers (Lab) (CO3010)}}}\\
+    ~~\\
+    \hline
+    \\
+    \multicolumn{1}{l}{\textbf{{\Large Assignment }}}\\
+    \\
+    \textbf{{\LARGE LAB\_01}}\\
+    \\
+    \hline
+    \end{tabular}
+\end{center}
+
+\vspace{2cm}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rrl}
+        & Instructor(s): & Phan Văn Sỹ, CSE-HCMUT \\
+        & Class: & CC03\\
+        & Student: & Vo Le Thanh Trieu - 2453297\\
+    \end{tabular}
+\end{table}
+
+\vspace{1cm}
+\begin{center}
+    {\footnotesize Ho Chi Minh City, September 2026}
+\end{center}
+\end{titlepage}
+
+\thispagestyle{fancy}
+\newpage
+\tableofcontents
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LƯU Ý: Hãy đổi tên file và thư mục của bạn thành KHÔNG DẤU KHÔNG CÁCH
+% Ví dụ: Đề bài.tex -> DeBai.tex
+% Dùng \input an toàn hơn \include cho các đoạn nhỏ
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ------------------------------------------------------------
+% Astonishing STM32 C code block
+% ------------------------------------------------------------
+\newtcblisting[auto counter,number within=section]{stmcode}[1]{
+    enhanced,
+    breakable,
+    listing only,
+    colback=CodeBackground,
+    colframe=CodeFrame,
+    colbacktitle=ReportNavy,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={Program~\thetcbcounter: #1},
+    attach boxed title to top left={xshift=4mm,yshift=-2mm},
+    boxed title style={
+        colback=ReportNavy,
+        colframe=ReportNavy,
+        arc=1.5mm,
+        boxrule=0pt
+    },
+    arc=2mm,
+    boxrule=0.7pt,
+    left=7mm,
+    right=2mm,
+    top=4mm,
+    bottom=2mm,
+    drop shadow southeast,
+    before skip=1.2em,
+    after skip=1.2em,
+    listing options={
+        language=C,
+        basicstyle=\ttfamily\small,
+        keywordstyle=\color{CodeKeyword}\bfseries,
+        commentstyle=\color{CodeComment}\itshape,
+        stringstyle=\color{CodeString},
+        numbers=left,
+        numberstyle=\tiny\color{CodeNumber},
+        numbersep=10pt,
+        stepnumber=1,
+        showstringspaces=false,
+        breaklines=true,
+        breakatwhitespace=false,
+        keepspaces=true,
+        tabsize=4,
+        columns=fullflexible,
+        escapeinside={(*@}{@*)}
+    }
+}
+
+% ------------------------------------------------------------
+% Reusable figure placeholder
+% The real image is loaded automatically when the file exists.
+% ------------------------------------------------------------
+\newcommand{\schematicplaceholder}[2]{%
+    \IfFileExists{#1}{%
+        \includegraphics[width=#2\textwidth]{#1}%
+    }{%
+        \fcolorbox{ReportCyan}{CodeBackground}{%
+            \parbox[c][5.5cm][c]{0.82\textwidth}{%
+                \centering
+                \textcolor{ReportNavy}{\Large\bfseries Schematic Placeholder}\\[0.8em]
+                Add the image file:\\[0.4em]
+                \texttt{\detokenize{#1}}
+            }%
+        }%
+    }%
+}
+
+% ============================================================
+\section{LED Animation Exercises}
+
+This report presents the design and implementation of the first three LED
+animation exercises using the STM32F103C6Ux microcontroller. STM32CubeMX was
+used to configure the GPIO pins and generate the initialization code. The
+application code was edited and compiled in Visual Studio Code using CMake.
+
+In all three exercises, the positive terminal of each LED is connected to the
+3.3-V supply, while its negative terminal is connected to an STM32 GPIO output.
+The LEDs are therefore \textit{active-low}: a low output activates an LED and a
+high output deactivates it.
+
+\begin{table}[H]
+    \centering
+    \caption{Relationship between the GPIO output and an active-low LED}
+    \label{tab:active-low}
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{HAL state} & \textbf{Approximate output voltage} & \textbf{LED state} \\
+        \midrule
+        \texttt{GPIO\_PIN\_RESET} & 0 V & On \\
+        \texttt{GPIO\_PIN\_SET} & 3.3 V & Off \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Exercise 1: Alternating Two LEDs}
+
+\subsubsection{Objective and GPIO configuration}
+
+Exercise 1 controls a red LED connected to PA5 and a yellow LED connected to
+PA6. The two LEDs must alternate every two seconds. When the red LED is on, the
+yellow LED is off, and after two seconds their states are exchanged.
+
+\begin{table}[H]
+    \centering
+    \caption{GPIO configuration for Exercise 1}
+    \label{tab:exercise1-gpio}
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{GPIO pin} & \textbf{CubeMX label} & \textbf{Function} \\
+        \midrule
+        PA5 & \texttt{LED\_RED} & Red LED output \\
+        PA6 & \texttt{LED\_YELLOW} & Yellow LED output \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{Schematic}
+
+Figure~\ref{fig:exercise1-schematic} is reserved for the Proteus schematic of
+Exercise 1. The figure caption links to the corresponding Proteus project.
+
+\begin{figure}[H]
+    \centering
+    \schematicplaceholder{figures/exercise1-schematic.png}{0.86}
+    \caption{\href{\exerciseOneURL}{Exercise 1 Proteus schematic and downloadable project.}}
+    \label{fig:exercise1-schematic}
+\end{figure}
+
+\subsubsection{Implementation and operation}
+
+The program first writes a low level to PA5 to activate the red LED and a high
+level to PA6 to deactivate the yellow LED. After a 2000-ms delay, the output
+levels are reversed. Because these instructions are placed inside an infinite
+loop, the two states repeat continuously.
+
+\begin{stmcode}{Alternating red and yellow LEDs}
+while (1)
+{
+    /* State 1: Red ON, Yellow OFF */
+    HAL_GPIO_WritePin(LED_RED_GPIO_Port,
+                      LED_RED_Pin,
+                      GPIO_PIN_RESET);
+
+    HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port,
+                      LED_YELLOW_Pin,
+                      GPIO_PIN_SET);
+
+    HAL_Delay(2000);
+
+    /* State 2: Red OFF, Yellow ON */
+    HAL_GPIO_WritePin(LED_RED_GPIO_Port,
+                      LED_RED_Pin,
+                      GPIO_PIN_SET);
+
+    HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port,
+                      LED_YELLOW_Pin,
+                      GPIO_PIN_RESET);
+
+    HAL_Delay(2000);
+}
+\end{stmcode}
+
+The resulting sequence is summarized in Table~\ref{tab:exercise1-sequence}.
+
+\begin{table}[H]
+    \centering
+    \caption{State sequence for Exercise 1}
+    \label{tab:exercise1-sequence}
+    \begin{tabular}{cccc}
+        \toprule
+        \textbf{State} & \textbf{Red LED} & \textbf{Yellow LED} & \textbf{Duration} \\
+        \midrule
+        1 & On & Off & 2 seconds \\
+        2 & Off & On & 2 seconds \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Exercise 2: Three-LED Traffic Light}
+
+\subsubsection{Objective and GPIO configuration}
+
+Exercise 2 extends the previous circuit by adding a green LED to PA7. The three
+LEDs simulate a simple traffic light. The red state lasts five seconds, the
+yellow state lasts two seconds, and the green state lasts three seconds.
+
+\begin{table}[H]
+    \centering
+    \caption{GPIO configuration for Exercise 2}
+    \label{tab:exercise2-gpio}
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{GPIO pin} & \textbf{CubeMX label} & \textbf{Function} \\
+        \midrule
+        PA5 & \texttt{LED\_RED} & Red LED output \\
+        PA6 & \texttt{LED\_YELLOW} & Yellow LED output \\
+        PA7 & \texttt{LED\_GREEN} & Green LED output \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{Schematic}
+
+\begin{figure}[H]
+    \centering
+    \schematicplaceholder{figures/exercise2-schematic.png}{0.86}
+    \caption{\href{\exerciseTwoURL}{Exercise 2 Proteus schematic and downloadable project.}}
+    \label{fig:exercise2-schematic}
+\end{figure}
+
+\subsubsection{Implementation and operation}
+
+Only one LED is activated in each traffic-light state. Each state is written
+explicitly so that the required output levels can be inspected easily. This
+approach also guarantees that the two unused LEDs are switched off before the
+program waits for the specified duration.
+
+\begin{stmcode}{Three-state traffic-light controller}
+while (1)
+{
+    /* RED for 5 seconds */
+    HAL_GPIO_WritePin(GPIOA, LED_RED_Pin,
+                      GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, LED_YELLOW_Pin,
+                      GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, LED_GREEN_Pin,
+                      GPIO_PIN_SET);
+
+    HAL_Delay(5000);
+
+    /* YELLOW for 2 seconds */
+    HAL_GPIO_WritePin(GPIOA, LED_RED_Pin,
+                      GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, LED_YELLOW_Pin,
+                      GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, LED_GREEN_Pin,
+                      GPIO_PIN_SET);
+
+    HAL_Delay(2000);
+
+    /* GREEN for 3 seconds */
+    HAL_GPIO_WritePin(GPIOA, LED_RED_Pin,
+                      GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, LED_YELLOW_Pin,
+                      GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, LED_GREEN_Pin,
+                      GPIO_PIN_RESET);
+
+    HAL_Delay(3000);
+}
+\end{stmcode}
+
+One complete traffic-light cycle lasts ten seconds, as shown in
+Table~\ref{tab:exercise2-sequence}.
+
+\begin{table}[H]
+    \centering
+    \caption{State sequence for Exercise 2}
+    \label{tab:exercise2-sequence}
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{State} & \textbf{Red} & \textbf{Yellow} & \textbf{Green} & \textbf{Duration} \\
+        \midrule
+        1 & On & Off & Off & 5 seconds \\
+        2 & Off & On & Off & 2 seconds \\
+        3 & Off & Off & On & 3 seconds \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% ============================================================
+\subsection{Exercise 3: Four-Way Traffic Light}
+
+\subsubsection{Objective and control strategy}
+
+Exercise 3 expands the circuit into a four-way traffic light containing twelve
+physical LEDs. Each direction has one red, one yellow, and one green LED. In
+the implemented two-phase intersection, opposite directions are synchronized:
+North and South always display the same state, while East and West always
+display the same state.
+
+This design uses six GPIO control signals. Each output controls two physical
+LEDs of the same color in opposite directions. Therefore, the system still
+contains all twelve required LEDs:
+
+\[
+    6\ \text{GPIO control signals}
+    \times 2\ \text{physical LEDs per signal}
+    = 12\ \text{physical LEDs}.
+\]
+
+The North-South and East-West groups must never display green simultaneously
+because their traffic paths intersect. While one group is green or yellow, the
+perpendicular group remains red.
+
+\begin{table}[H]
+    \centering
+    \caption{GPIO configuration for Exercise 3}
+    \label{tab:exercise3-gpio}
+    \begin{tabular}{ccl}
+        \toprule
+        \textbf{GPIO pin} & \textbf{CubeMX label} & \textbf{Physical LEDs controlled} \\
+        \midrule
+        PA5  & \texttt{NS\_RED}    & North red and South red \\
+        PA6  & \texttt{NS\_YELLOW} & North yellow and South yellow \\
+        PA7  & \texttt{NS\_GREEN}  & North green and South green \\
+        PA8  & \texttt{EW\_RED}    & East red and West red \\
+        PA9  & \texttt{EW\_YELLOW} & East yellow and West yellow \\
+        PA10 & \texttt{EW\_GREEN}  & East green and West green \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Each physical LED should use an individual current-limiting resistor even when
+two opposite LEDs share the same GPIO control signal.
+
+\subsubsection{Schematic}
+
+\begin{figure}[H]
+    \centering
+    \schematicplaceholder{figures/exercise3-schematic.png}{0.90}
+    \caption{\href{\exerciseThreeURL}{Exercise 3 Proteus schematic and downloadable project.}}
+    \label{fig:exercise3-schematic}
+\end{figure}
+
+\subsubsection{Traffic-light sequence}
+
+The four-way intersection uses four states. Each direction receives a
+three-second green state and a two-second yellow state. Its red state lasts
+five seconds, which is equal to the other group's green and yellow durations.
+
+\begin{table}[H]
+    \centering
+    \caption{State sequence for the four-way traffic light}
+    \label{tab:exercise3-sequence}
+    \begin{tabular}{cccc}
+        \toprule
+        \textbf{State} & \textbf{North-South} & \textbf{East-West} & \textbf{Duration} \\
+        \midrule
+        1 & Green & Red & 3 seconds \\
+        2 & Yellow & Red & 2 seconds \\
+        3 & Red & Green & 3 seconds \\
+        4 & Red & Yellow & 2 seconds \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{Implementation and operation}
+
+The program writes every output explicitly to keep the implementation easy to
+read and debug. A selected color is activated with
+\texttt{GPIO\_PIN\_RESET}; the other colors are deactivated with
+\texttt{GPIO\_PIN\_SET}.
+
+\begin{stmcode}{Four-way traffic-light controller}
+while (1)
+{
+    /* State 1: North-South GREEN, East-West RED */
+    HAL_GPIO_WritePin(GPIOA, NS_RED_Pin,    GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, NS_YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, NS_GREEN_Pin,  GPIO_PIN_RESET);
+
+    HAL_GPIO_WritePin(GPIOA, EW_RED_Pin,    GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, EW_YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, EW_GREEN_Pin,  GPIO_PIN_SET);
+
+    HAL_Delay(3000);
+
+    /* State 2: North-South YELLOW, East-West RED */
+    HAL_GPIO_WritePin(GPIOA, NS_RED_Pin,    GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, NS_YELLOW_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, NS_GREEN_Pin,  GPIO_PIN_SET);
+
+    HAL_GPIO_WritePin(GPIOA, EW_RED_Pin,    GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, EW_YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, EW_GREEN_Pin,  GPIO_PIN_SET);
+
+    HAL_Delay(2000);
+
+    /* State 3: North-South RED, East-West GREEN */
+    HAL_GPIO_WritePin(GPIOA, NS_RED_Pin,    GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, NS_YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, NS_GREEN_Pin,  GPIO_PIN_SET);
+
+    HAL_GPIO_WritePin(GPIOA, EW_RED_Pin,    GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, EW_YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, EW_GREEN_Pin,  GPIO_PIN_RESET);
+
+    HAL_Delay(3000);
+
+    /* State 4: North-South RED, East-West YELLOW */
+    HAL_GPIO_WritePin(GPIOA, NS_RED_Pin,    GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, NS_YELLOW_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, NS_GREEN_Pin,  GPIO_PIN_SET);
+
+    HAL_GPIO_WritePin(GPIOA, EW_RED_Pin,    GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, EW_YELLOW_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOA, EW_GREEN_Pin,  GPIO_PIN_SET);
+
+    HAL_Delay(2000);
+}
+\end{stmcode}
+
+After the fourth state, the infinite loop returns to the first state. This
+creates a continuous ten-second intersection cycle without allowing the two
+perpendicular traffic groups to receive green signals at the same time.
+
+% ============================================================
+\section{Conclusion}
+
+The three exercises demonstrate progressive GPIO control using the STM32 HAL
+library. Exercise 1 introduces active-low LED switching and delays. Exercise 2
+extends the design into a three-state traffic light. Exercise 3 coordinates
+twelve physical LEDs as a four-way intersection while using six synchronized
+GPIO control signals. All three implementations use explicit output states,
+which makes the programs straightforward to verify and extend in subsequent
+laboratory exercises.
+
+
+
+\end{document}

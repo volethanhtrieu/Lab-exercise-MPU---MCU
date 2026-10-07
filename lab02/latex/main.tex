@@ -1,0 +1,3210 @@
+% !TeX program = pdflatex
+\documentclass[a4paper]{article}
+
+% --- Gói ngôn ngữ và font ---
+\usepackage[T5,T1]{fontenc}    % Vietnamese support with T1 as the main encoding
+\usepackage[utf8]{inputenc}    % UTF-8 source text
+\usepackage{lmodern}           % Vector fonts for pdfLaTeX
+\usepackage[english]{babel}    % Hỗ trợ tiếng Anh (tùy chọn)
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{indentfirst} % Ép buộc thụt đầu dòng đoạn đầu tiên
+
+% --- Gói hình ảnh và màu sắc ---
+\usepackage{graphicx}
+\usepackage{xcolor} % Dùng xcolor thay cho color để mạnh mẽ hơn
+\usepackage{tikz}
+\usetikzlibrary{arrows,backgrounds}
+\usepackage[framemethod=tikz]{mdframed}
+
+% --- Gói định dạng trang và bảng ---
+\usepackage{geometry}
+\usepackage{a4wide}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hhline}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{lastpage}
+\usepackage{placeins}
+\usepackage{setspace}
+\usepackage[skip=0pt]{caption}
+\usepackage{float} % Để cố định hình ảnh với [H]
+
+% --- Gói code và thuật toán ---
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+
+% --- Các gói khác ---
+\usepackage{blindtext}
+\usepackage{comment}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+% --- Cấu hình link ---
+\hypersetup{
+    urlcolor=blue,
+    linkcolor=black,
+    citecolor=black,
+    colorlinks=true
+}
+
+% --- Định nghĩa màu sắc ---
+\setlength{\columnseprule}{1pt}
+\def\columnseprulecolor{\color{black}}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{ReportNavy}{HTML}{102A43}
+\definecolor{ReportCyan}{HTML}{32B5D2}
+\definecolor{CodeBackground}{HTML}{F6F8FA}
+\definecolor{CodeFrame}{HTML}{CBD5E1}
+\definecolor{CodeComment}{HTML}{2E7D32}
+\definecolor{CodeKeyword}{HTML}{005CC5}
+\definecolor{CodeString}{HTML}{B31D28}
+\definecolor{CodeNumber}{HTML}{64748B}
+
+% Optional logo asset: place your official hcmut.png alongside this file.
+\newcommand{\reportlogo}[1]{%
+    \IfFileExists{hcmut.png}{\includegraphics[width=#1]{hcmut.png}}{%
+        \ifdim#1<1cm
+          \begin{tikzpicture}[baseline=(mark.base)]
+          \node[draw=ReportNavy,fill=ReportNavy,text=white,rounded corners=1pt,
+                minimum width=#1,minimum height=#1,
+                inner sep=0pt,font=\tiny\bfseries] (mark) {H};
+          \end{tikzpicture}%
+        \else
+          \begin{tikzpicture}[baseline=(mark.base)]
+          \node[draw=ReportNavy,fill=ReportNavy,text=white,rounded corners=2pt,
+                minimum width=#1,minimum height=18mm,
+                inner sep=4pt,font=\Large\bfseries] (mark) {HCMUT};
+          \end{tikzpicture}%
+        \fi
+    }%
+}
+
+% --- Cấu hình Minted (C++) ---
+% Minted is not needed; tcolorbox/listings supplies the template code boxes.
+%\usemintedstyle{vs}
+% --- Cấu hình Header/Footer ---
+\everymath{\color{blue}}
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{
+    \begin{tabular}{rl}
+        \begin{picture}(25,15)(0,0)
+            \put(0,0){\reportlogo{8mm}}
+        \end{picture}&
+        \begin{tabular}{l}
+            \textbf{\ttfamily University of Technology}\\
+            \textbf{\ttfamily Faculty of Computer Science and Engineering}
+        \end{tabular} 	
+    \end{tabular}
+}
+\fancyhead[R]{} % Bên phải header để trống
+
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\scriptsize \ttfamily \textcolor{blue}{Microprocessors--Microcontrollers (CO3010) -- Lab 02 Timer}}
+\fancyfoot[R]{\scriptsize \ttfamily Page {\thepage}/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+% --- Cấu hình Mục lục ---
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\setlength{\parindent}{1cm}
+\setlength{\parskip}{0pt}
+
+\begin{document}
+
+% --- TRANG BÌA ---
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\begin{center}
+    \Large Vietnam National University, Ho Chi Minh City \\
+    \Large University of Technology \\
+    \Large Faculty of Computer Science and Engineering
+\end{center}
+
+\vspace{1cm}
+
+\begin{figure}[H]
+    \centering
+    \reportlogo{4cm}
+\end{figure}
+
+\vspace{1cm}
+
+\begin{center}
+    \begin{tabular}{c}
+    \multicolumn{1}{l}{\textbf{{\Large Microprocessors--Microcontrollers (Lab) (CO3010)}}}\\
+    ~~\\
+    \hline
+    \\
+    \multicolumn{1}{l}{\textbf{{\Large Laboratory Report}}}\\
+    \\
+    \textbf{{\Large LAB\_02: TIMER INTERRUPT}}\\
+    \textbf{{\Large AND LED SCANNING}}\\
+    \\
+    \hline
+    \end{tabular}
+\end{center}
+
+\vspace{2cm}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rrl}
+        & Instructor(s): & Phan Văn Sỹ, CSE-HCMUT \\
+        & Class: & CC03\\
+        & Student: & Vo Le Thanh Trieu -- 2453297\\
+    \end{tabular}
+\end{table}
+
+\vspace{1cm}
+\begin{center}
+    {\footnotesize Ho Chi Minh City, October 2026}
+\end{center}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\thispagestyle{fancy}
+\newpage
+\tableofcontents
+\newpage
+
+% ------------------------------------------------------------
+% Astonishing STM32 C code block
+% ------------------------------------------------------------
+\newtcblisting[auto counter,number within=section]{stmcode}[1]{
+    enhanced,
+    breakable,
+    listing only,
+    colback=CodeBackground,
+    colframe=CodeFrame,
+    colbacktitle=ReportNavy,
+    coltitle=white,
+    fonttitle=\bfseries,
+    title={Program~\thetcbcounter: #1},
+    attach boxed title to top left={xshift=4mm,yshift=-2mm},
+    boxed title style={
+        colback=ReportNavy,
+        colframe=ReportNavy,
+        arc=1.5mm,
+        boxrule=0pt
+    },
+    arc=2mm,
+    boxrule=0.7pt,
+    left=7mm,
+    right=2mm,
+    top=4mm,
+    bottom=2mm,
+    drop shadow southeast,
+    before skip=1.2em,
+    after skip=1.2em,
+    listing options={
+        language=C,
+        basicstyle=\ttfamily\small,
+        keywordstyle=\color{CodeKeyword}\bfseries,
+        commentstyle=\color{CodeComment}\itshape,
+        stringstyle=\color{CodeString},
+        numbers=left,
+        numberstyle=\tiny\color{CodeNumber},
+        numbersep=10pt,
+        stepnumber=1,
+        showstringspaces=false,
+        breaklines=true,
+        breakatwhitespace=false,
+        keepspaces=true,
+        tabsize=4,
+        columns=fullflexible,
+        escapeinside={(*@}{@*)}
+    }
+}
+
+% ------------------------------------------------------------
+% Reusable figure placeholder
+% The real image is loaded automatically when the file exists.
+% ------------------------------------------------------------
+\newcommand{\schematicplaceholder}[2]{%
+    \IfFileExists{#1}{%
+        \includegraphics[width=#2\textwidth]{#1}%
+    }{%
+        \fcolorbox{ReportCyan}{CodeBackground}{%
+            \parbox[c][5.5cm][c]{0.82\textwidth}{%
+                \centering
+                \textcolor{ReportNavy}{\Large\bfseries Schematic Placeholder}\\[0.8em]
+                Add the image file:\\[0.4em]
+                \texttt{\detokenize{#1}}
+            }%
+        }%
+    }%
+}
+
+% ============================================================
+\section{Timer Interrupt and LED Scanning}
+
+This report follows Exercises 1--10 of \emph{Lab 02: Timer Interrupt and LED
+Scanning}.
+
+STM32CubeMX configures the STM32F103C6; application code is edited
+and built in Visual Studio Code with CMake. Proteus provides the circuit
+simulation. The code listings document successive versions of the same
+application: later exercises extend the earlier ones. Screenshots of the
+student's own Proteus simulations can be inserted into the named figure files.
+
+
+% ============================================================
+% Replace the existing Exercise 1 subsection with this section.
+% The original figure path, caption, and label are preserved.
+% ============================================================
+\subsection{Exercise 1: Two seven-segment displays}
+
+\subsubsection{Objective and GPIO configuration}
+
+Exercise 1 uses timer interrupts to control two common-anode
+seven-segment displays. The first display shows the number 1,
+and the second shows the number 2. Only one display is enabled
+at a time, and the selected display changes every 500~ms.
+
+The segment cathodes of both displays share PB0--PB6.
+Separate PNP transistors control their common anodes through
+PA6 and PA7. This arrangement allows the two displays to
+share the same segment signals.
+
+\begin{table}[H]
+    \centering
+    \caption{GPIO configuration for Exercise 1}
+    \label{tab:ex01-gpio}
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{GPIO pins} &
+        \textbf{Signals} &
+        \textbf{Function} \\
+        \midrule
+        PB0--PB6 &
+        SEG\_A--SEG\_G &
+        Shared segment outputs, active low \\
+        PA6 &
+        EN0 &
+        First display enable, active low \\
+        PA7 &
+        EN1 &
+        Second display enable, active low \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+PB0, PB1, PB2, PB3, PB4, PB5, and PB6 correspond to
+segments a, b, c, d, e, f, and g, respectively.
+These pins are configured as push-pull outputs with no
+internal pull-up or pull-down resistors.
+
+For the selected common-anode display, writing
+\texttt{GPIO\_PIN\_RESET} to a segment output turns that
+segment on. Writing \texttt{GPIO\_PIN\_SET} turns it off.
+The PNP enable signals are also active low: PA6 or PA7
+must be low to enable its corresponding display.
+
+\subsubsection{Schematic}
+
+\begin{figure}[H]
+    \centering
+    \schematicplaceholder{figures/pic02.png}{0.86}
+    \caption{Proteus schematic for Exercise 1: two common-anode digits and PNP enables.}
+    \label{fig:ex01}
+\end{figure}
+
+\subsubsection{Step-by-step timer calculation}
+
+The timer configuration follows the introductory timer
+setup in the lab manual. TIM2 generates an interrupt every
+10~ms, and the application counts these interrupts to obtain
+the required 500-ms display-selection interval.
+
+\paragraph{Step 1: Determine the TIM2 input clock.}
+
+The source code selects the internal HSI oscillator,
+disables the PLL, and sets the AHB and APB1 clock dividers
+to 1. Therefore,
+\[
+    f_{\mathrm{SYSCLK}}
+    = f_{\mathrm{HCLK}}
+    = f_{\mathrm{PCLK1}}
+    = 8\,000\,000~\mathrm{Hz}.
+\]
+
+Because the APB1 divider is 1, the TIM2 input clock equals
+the APB1 peripheral clock:
+\[
+    f_{\mathrm{TIM2}}
+    = 8\,000\,000~\mathrm{Hz}
+    = 8~\mathrm{MHz}.
+\]
+
+\paragraph{Step 2: Calculate the counter clock after the prescaler.}
+
+The source code sets
+\[
+    PSC = 7999.
+\]
+
+The prescaler divides the timer input clock by
+$PSC+1$, so the counter frequency is
+\[
+    f_{\mathrm{CNT}}
+    = \frac{f_{\mathrm{TIM2}}}{PSC+1}
+    = \frac{8\,000\,000}{7999+1}
+    = \frac{8\,000\,000}{8000}
+    = 1000~\mathrm{Hz}.
+\]
+
+Thus, the counter advances once every
+\[
+    T_{\mathrm{CNT}}
+    = \frac{1}{f_{\mathrm{CNT}}}
+    = \frac{1}{1000}~\mathrm{s}
+    = 1~\mathrm{ms}.
+\]
+
+\paragraph{Step 3: Calculate the timer update interval.}
+
+TIM2 uses up-counting mode, and the source code sets
+\[
+    ARR = 9.
+\]
+
+The counter counts from 0 through 9. An update occurs
+when it overflows and returns to 0, giving
+\[
+    N_{\mathrm{counts}} = ARR+1 = 10
+\]
+counter ticks per update.
+
+Therefore,
+\[
+    T_{\mathrm{interrupt}}
+    = (ARR+1)T_{\mathrm{CNT}}
+    = 10 \times 1~\mathrm{ms}
+    = 10~\mathrm{ms}.
+\]
+
+Equivalently,
+\[
+    T_{\mathrm{interrupt}}
+    = \frac{(PSC+1)(ARR+1)}{f_{\mathrm{TIM2}}}
+    = \frac{8000 \times 10}{8\,000\,000}
+    = 0.01~\mathrm{s}.
+\]
+
+\paragraph{Step 4: Calculate the interrupt frequency.}
+
+The timer interrupt frequency is
+\[
+    f_{\mathrm{interrupt}}
+    = \frac{1}{T_{\mathrm{interrupt}}}
+    = \frac{1}{0.01}
+    = 100~\mathrm{Hz}.
+\]
+
+With TIM2 interrupts enabled, the callback is therefore
+invoked 100 times per second.
+
+\paragraph{Step 5: Calculate the number of interrupts per display.}
+
+Each display must remain selected for
+\[
+    T_S = 500~\mathrm{ms}.
+\]
+
+The required number of timer interrupts is
+\[
+    N_{\mathrm{interrupts}}
+    = \frac{T_S}{T_{\mathrm{interrupt}}}
+    = \frac{500~\mathrm{ms}}{10~\mathrm{ms}}
+    = 50.
+\]
+
+This explains the condition \texttt{ticks >= 50}
+in the callback. The hardware timer still interrupts
+every 10~ms, while the display changes every
+\[
+    50 \times 10~\mathrm{ms}
+    = 500~\mathrm{ms}.
+\]
+
+\subsubsection{Segment-display function}
+
+The actual \texttt{display7SEG()} implementation in
+Exercise 1 handles only the numbers 1 and 2.
+
+Before writing a new digit, the function sets PB0--PB6
+high to turn off all segments. It then drives the
+required segment outputs low:
+\begin{itemize}
+    \item Number 1 uses segments b and c:
+          PB1 and PB2.
+    \item Number 2 uses segments a, b, d, e, and g:
+          PB0, PB1, PB3, PB4, and PB6.
+\end{itemize}
+
+The prototype is placed in \texttt{USER CODE BEGIN PFP},
+and the function definition is placed in
+\texttt{USER CODE BEGIN 0}.
+
+\begin{stmcode}{Exercise 1 display7SEG function}
+/* USER CODE BEGIN PFP */
+void display7SEG(int num);
+/* USER CODE END PFP */
+
+/* USER CODE BEGIN 0 */
+void display7SEG(int num){
+    /* Turn off all seven segments first */
+    HAL_GPIO_WritePin(
+        GPIOB,
+        GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+        GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,
+        GPIO_PIN_SET
+    );
+
+    if (num == 1)
+    {
+        /* Number 1 uses segments b and c */
+        HAL_GPIO_WritePin(
+            GPIOB,
+            GPIO_PIN_1 | GPIO_PIN_2,
+            GPIO_PIN_RESET
+        );
+    }
+    else if (num == 2)
+    {
+        /* Number 2 uses segments a, b, d, e, and g */
+        HAL_GPIO_WritePin(
+            GPIOB,
+            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 |
+            GPIO_PIN_4 | GPIO_PIN_6,
+            GPIO_PIN_RESET
+        );
+    }
+  }
+/* USER CODE END 0 */
+\end{stmcode}
+
+\subsubsection{Initialization in main}
+
+After GPIO and TIM2 initialization, both displays are
+disabled by setting PA6 and PA7 high. The segment pattern
+for number 1 is then prepared, and PA6 is driven low to
+enable the first display.
+
+Finally, \texttt{HAL\_TIM\_Base\_Start\_IT(\&htim2)}
+starts TIM2 in interrupt mode. The TIM2 interrupt must
+also be enabled in the CubeMX NVIC settings.
+
+The following excerpt matches the initialization
+in the supplied source code.
+
+\begin{stmcode}{Exercise 1 initialization inside main}
+MX_GPIO_Init();
+MX_TIM2_Init();
+
+/* USER CODE BEGIN 2 */
+
+/* Disable both displays */
+HAL_GPIO_WritePin(
+    GPIOA,
+    GPIO_PIN_6 | GPIO_PIN_7,
+    GPIO_PIN_SET
+);
+
+/* Prepare number 1, then enable the first display */
+display7SEG(1);
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+
+/* Start TIM2 with interrupts */
+HAL_TIM_Base_Start_IT(&htim2);
+
+/* USER CODE END 2 */
+\end{stmcode}
+
+The \texttt{while (1)} loop contains no application
+processing in this exercise. After initialization,
+display switching is handled by the timer callback,
+without calling \texttt{HAL\_Delay()}.
+
+\subsubsection{Timer interrupt callback}
+
+The callback checks \texttt{htim->Instance} so that
+the display logic executes only for TIM2.
+
+Two static variables retain their values between
+callback invocations:
+\begin{itemize}
+    \item \texttt{ticks} counts the 10-ms timer events.
+    \item \texttt{active\_display} records which display
+          is currently enabled. Value 0 represents
+          the first display, and value 1 represents
+          the second.
+\end{itemize}
+
+The initial value of \texttt{active\_display} is 0,
+matching the first display enabled during startup.
+Every callback increments \texttt{ticks}. Once it
+reaches 50, the counter is reset and the other
+display is selected.
+
+\begin{stmcode}{Exercise 1 TIM2 callback}
+/* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+    if (htim->Instance == TIM2)
+    {
+        static uint8_t ticks = 0;
+        static uint8_t active_display = 0;
+
+        ticks++;
+
+        if (ticks >= 50)
+        {
+            ticks = 0;
+
+            /* Turn off both displays before changing segments */
+            HAL_GPIO_WritePin(
+                GPIOA,
+                GPIO_PIN_6 | GPIO_PIN_7,
+                GPIO_PIN_SET
+            );
+
+            if (active_display == 0)
+            {
+                /* Change from the first display to the second */
+                display7SEG(2);
+                HAL_GPIO_WritePin(
+                    GPIOA, GPIO_PIN_7, GPIO_PIN_RESET
+                );
+                active_display = 1;
+            }
+            else
+            {
+                /* Change from the second display to the first */
+                display7SEG(1);
+                HAL_GPIO_WritePin(
+                    GPIOA, GPIO_PIN_6, GPIO_PIN_RESET
+                );
+                active_display = 0;
+            }
+        }
+    }
+  }
+/* USER CODE END 4 */
+\end{stmcode}
+
+Each switching operation follows three steps:
+disable both displays, write the new segment pattern,
+and enable the selected display. Disabling the displays
+before changing the shared segment signals prevents
+the previous display from briefly showing the new pattern.
+
+The callback executes once for each timer event and
+then returns. It is not an infinite loop. Between
+interrupts, the GPIO outputs retain their levels,
+so the selected display remains enabled.
+
+\subsubsection{Expected simulation behavior}
+
+Immediately after initialization, the first display
+shows 1 and the second is disabled. After 50 timer
+events, approximately 500~ms later, the second
+display shows 2 and the first is disabled.
+The sequence then repeats.
+
+\begin{table}[H]
+    \centering
+    \caption{Nominal display sequence for Exercise 1}
+    \label{tab:ex01-sequence}
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{Time interval} &
+        \textbf{PA6 / EN0} &
+        \textbf{PA7 / EN1} &
+        \textbf{Visible digit} \\
+        \midrule
+        0--0.5~s   & LOW  & HIGH & First display: 1 \\
+        0.5--1.0~s & HIGH & LOW  & Second display: 2 \\
+        1.0--1.5~s & LOW  & HIGH & First display: 1 \\
+        1.5--2.0~s & HIGH & LOW  & Second display: 2 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Because the required selection interval is 500~ms,
+the alternating displays are clearly visible in
+Proteus. This slow scan demonstrates the multiplexing
+process; it does not make both digits appear
+continuously illuminated.
+
+\subsubsection{Short question: Frequency of the scanning process}
+
+The introduction defines the scanning frequency
+using the time required to visit every display.
+For $N$ displays, each selected for an interval $T_S$,
+\[
+    T_{\mathrm{scan}} = N T_S,
+    \qquad
+    f_{\mathrm{scan}} = \frac{1}{N T_S}.
+\]
+
+Exercise 1 has two displays, with
+$T_S = 500~\mathrm{ms} = 0.5~\mathrm{s}$. Therefore,
+\[
+    T_{\mathrm{scan}}
+    = 2 \times 0.5~\mathrm{s}
+    = 1~\mathrm{s},
+\]
+and
+\[
+    \boxed{
+        f_{\mathrm{scan}}
+        = \frac{1}{1~\mathrm{s}}
+        = 1~\mathrm{Hz}
+    }.
+\]
+
+A different display is selected every 0.5~s,
+giving a selection rate of
+\[
+    f_{\mathrm{selection}}
+    = \frac{1}{0.5~\mathrm{s}}
+    = 2~\mathrm{Hz}.
+\]
+
+Thus, the TIM2 interrupt frequency is 100~Hz,
+the display-selection rate is 2~Hz, and the
+complete scanning frequency is \textbf{1~Hz}.
+
+% ============================================================
+% ============================================================
+% Replace the existing Exercise 2 subsection with this section.
+% The original figure path, caption, and label are preserved.
+% ============================================================
+\subsection{Exercise 2: Four digits and the center dot}
+
+\subsubsection{Objective and GPIO configuration}
+
+Exercise 2 extends Exercise 1 by adding two more
+common-anode seven-segment displays and two center
+LEDs controlled by the DOT signal on PA4.
+
+The four displays show the digits 1, 2, 3, and 0,
+representing 12:30. Only one display is enabled
+at a time, and the selected display changes every
+500~ms. Both DOT LEDs change state together
+every second.
+
+The segment outputs remain connected to PB0--PB6.
+PA6--PA9 control the four PNP digit-enable circuits.
+
+\begin{table}[H]
+    \centering
+    \caption{GPIO configuration for Exercise 2}
+    \label{tab:ex02-gpio}
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{GPIO pins} &
+        \textbf{Signals} &
+        \textbf{Function} \\
+        \midrule
+        PB0--PB6 & SEG\_A--SEG\_G & Shared segment outputs \\
+        PA6 & EN0 & First display: digit 1 \\
+        PA7 & EN1 & Second display: digit 2 \\
+        PA8 & EN2 & Third display: digit 3 \\
+        PA9 & EN3 & Fourth display: digit 0 \\
+        PA4 & DOT & Two center LEDs \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The segment outputs, digit enables, and DOT signal
+are active low. A selected digit is enabled by
+driving its enable pin low, while the other
+enable pins remain high.
+
+\subsubsection{Schematic}
+
+\begin{figure}[H]
+    \centering
+    \schematicplaceholder{figures/pic01.png}{0.86}
+    \caption{Proteus schematic for Exercise 2: four digits, DOT, and D1.}
+    \label{fig:ex02}
+\end{figure}
+
+\subsubsection{Step-by-step timing calculation}
+
+TIM2 retains the introductory configuration:
+an 8-MHz input clock, prescaler 7999, and
+auto-reload value 9.
+
+\paragraph{Step 1: Calculate the timer interrupt interval.}
+
+The counter frequency after the prescaler is
+\[
+    f_{\mathrm{CNT}}
+    = \frac{8\,000\,000}{7999+1}
+    = 1000~\mathrm{Hz}.
+\]
+
+Thus, each counter tick lasts
+\[
+    T_{\mathrm{CNT}}
+    = \frac{1}{1000}~\mathrm{s}
+    = 1~\mathrm{ms}.
+\]
+
+Since the counter counts from 0 through 9,
+each update requires ten counter ticks:
+\[
+    T_{\mathrm{interrupt}}
+    = (9+1)\times 1~\mathrm{ms}
+    = 10~\mathrm{ms}.
+\]
+
+The corresponding interrupt frequency is
+\[
+    f_{\mathrm{interrupt}}
+    = \frac{1}{0.01~\mathrm{s}}
+    = 100~\mathrm{Hz}.
+\]
+
+\paragraph{Step 2: Calculate the digit-selection threshold.}
+
+Each display must remain selected for 500~ms.
+Therefore, the number of interrupts required
+before selecting the next display is
+\[
+    N_{\mathrm{scan}}
+    = \frac{500~\mathrm{ms}}{10~\mathrm{ms}}
+    = 50.
+\]
+
+This gives the callback condition
+\texttt{scan\_ticks >= 50}.
+
+\paragraph{Step 3: Calculate the DOT-toggle threshold.}
+
+DOT must change state every second:
+\[
+    T_{\mathrm{DOT\ toggle}} = 1000~\mathrm{ms}.
+\]
+
+The required number of interrupts is
+\[
+    N_{\mathrm{DOT}}
+    = \frac{1000~\mathrm{ms}}{10~\mathrm{ms}}
+    = 100.
+\]
+
+This gives the callback condition
+\texttt{dot\_ticks >= 100}.
+
+The two counters advance during every TIM2 callback,
+but each counter resets only when its own threshold
+is reached.
+
+\subsubsection{Segment-display function}
+
+The supplied Exercise 2 source implements
+\texttt{display7SEG()} for digits 0, 1, 2, and 3.
+These are the four values required to display 12:30.
+
+Before selecting a new pattern, the function sets
+all segment outputs high to turn them off.
+It then drives the required segment outputs low.
+
+\begin{table}[H]
+    \centering
+    \caption{Segment patterns used in Exercise 2}
+    \label{tab:ex02-patterns}
+    \begin{tabular}{cl}
+        \toprule
+        \textbf{Digit} & \textbf{Segments turned on} \\
+        \midrule
+        0 & a, b, c, d, e, f \\
+        1 & b, c \\
+        2 & a, b, d, e, g \\
+        3 & a, b, c, d, g \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{stmcode}{Exercise 2 display7SEG function}
+/* USER CODE BEGIN PFP */
+void display7SEG(int num);
+/* USER CODE END PFP */
+
+/* USER CODE BEGIN 0 */
+void display7SEG(int num)
+{
+    /* First turn all seven segments off */
+    HAL_GPIO_WritePin(
+        GPIOB,
+        GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+        GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6,
+        GPIO_PIN_SET
+    );
+
+    if (num == 0)
+    {
+        /* 0: a, b, c, d, e, f */
+        HAL_GPIO_WritePin(
+            GPIOB,
+            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
+            GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5,
+            GPIO_PIN_RESET
+        );
+    }
+    else if (num == 1)
+    {
+        /* 1: b, c */
+        HAL_GPIO_WritePin(
+            GPIOB,
+            GPIO_PIN_1 | GPIO_PIN_2,
+            GPIO_PIN_RESET
+        );
+    }
+    else if (num == 2)
+    {
+        /* 2: a, b, d, e, g */
+        HAL_GPIO_WritePin(
+            GPIOB,
+            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 |
+            GPIO_PIN_4 | GPIO_PIN_6,
+            GPIO_PIN_RESET
+        );
+    }
+    else if (num == 3)
+    {
+        /* 3: a, b, c, d, g */
+        HAL_GPIO_WritePin(
+            GPIOB,
+            GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
+            GPIO_PIN_3 | GPIO_PIN_6,
+            GPIO_PIN_RESET
+        );
+    }
+}
+/* USER CODE END 0 */
+\end{stmcode}
+
+\subsubsection{Initialization in main}
+
+After GPIO and TIM2 initialization, all four
+displays are disabled by setting PA6--PA9 high.
+PA4 is also set high so that the DOT LEDs
+start in the off state.
+
+The application then prepares digit 1 and enables
+the first display by setting PA6 low.
+Finally, TIM2 is started in interrupt mode.
+
+\begin{stmcode}{Exercise 2 initialization inside main}
+MX_GPIO_Init();
+MX_TIM2_Init();
+
+/* USER CODE BEGIN 2 */
+
+/* Disable all four displays */
+HAL_GPIO_WritePin(
+    GPIOA,
+    GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9,
+    GPIO_PIN_SET
+);
+
+/* Start with the DOT LEDs off */
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+
+/* Show 1 on the first display immediately */
+display7SEG(1);
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+
+/* Start TIM2 and its interrupt */
+HAL_TIM_Base_Start_IT(&htim2);
+
+/* USER CODE END 2 */
+\end{stmcode}
+
+The main loop contains no application processing.
+Digit selection and DOT toggling are both handled
+in the timer callback without using
+\texttt{HAL\_Delay()}.
+
+\subsubsection{Timer interrupt callback}
+
+The callback checks that the interrupt belongs
+to TIM2. Three static variables retain their values
+between callback invocations:
+\begin{itemize}
+    \item \texttt{scan\_ticks} counts timer events
+          for the 500-ms display-selection interval.
+    \item \texttt{dot\_ticks} counts timer events
+          for the one-second DOT-toggle interval.
+    \item \texttt{active\_display} identifies the
+          selected display using indices 0--3.
+\end{itemize}
+
+The initial value of \texttt{active\_display} is 0,
+matching the first display enabled during startup.
+
+\begin{stmcode}{Exercise 2 TIM2 callback}
+/* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM2)
+    {
+        static uint8_t scan_ticks = 0;
+        static uint8_t dot_ticks = 0;
+        static uint8_t active_display = 0;
+
+        /* This callback runs once every 10 ms */
+        scan_ticks++;
+        dot_ticks++;
+
+        /* 100 * 10 ms = 1 second: change the DOT LEDs */
+        if (dot_ticks >= 100)
+        {
+            dot_ticks = 0;
+            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+        }
+
+        /* 50 * 10 ms = 500 ms: select the next display */
+        if (scan_ticks >= 50)
+        {
+            scan_ticks = 0;
+
+            /* Disable all displays before changing segments */
+            HAL_GPIO_WritePin(
+                GPIOA,
+                GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9,
+                GPIO_PIN_SET
+            );
+
+            active_display++;
+            if (active_display >= 4)
+            {
+                active_display = 0;
+            }
+
+            if (active_display == 0)
+            {
+                display7SEG(1);
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+            }
+            else if (active_display == 1)
+            {
+                display7SEG(2);
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+            }
+            else if (active_display == 2)
+            {
+                display7SEG(3);
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+            }
+            else
+            {
+                display7SEG(0);
+                HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+            }
+        }
+    }
+}
+/* USER CODE END 4 */
+\end{stmcode}
+
+After every 50 interrupts, the callback disables
+all displays, advances \texttt{active\_display},
+writes the required digit pattern, and enables
+the corresponding display. When the index reaches
+4, it returns to 0. The repeating selection
+sequence is therefore
+\[
+    0 \rightarrow 1 \rightarrow 2 \rightarrow 3
+    \rightarrow 0.
+\]
+
+Disabling every display before changing the segment
+signals prevents the previous display from briefly
+showing the next digit's pattern.
+
+The DOT and scanning conditions are separate
+\texttt{if} statements. Every 100 interrupts,
+both conditions are satisfied in the same callback
+invocation: DOT changes state, and the next display
+is selected. In the supplied source, DOT is
+processed first.
+
+\subsubsection{Expected simulation behavior}
+
+At startup, the first display shows 1 and DOT is off.
+Every 500~ms, the next display is selected.
+The digits remain fixed at 1, 2, 3, and 0;
+this exercise does not advance the displayed time.
+
+\begin{table}[H]
+    \centering
+    \caption{Nominal display and DOT sequence for Exercise 2}
+    \label{tab:ex02-sequence}
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{Time interval} &
+        \textbf{Enabled display} &
+        \textbf{Digit} &
+        \textbf{DOT state} \\
+        \midrule
+        0--0.5~s   & First, PA6 low  & 1 & Off \\
+        0.5--1.0~s & Second, PA7 low & 2 & Off \\
+        1.0--1.5~s & Third, PA8 low  & 3 & On \\
+        1.5--2.0~s & Fourth, PA9 low & 0 & On \\
+        2.0--2.5~s & First, PA6 low  & 1 & Off \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+All unselected digit-enable outputs remain high.
+The slow 500-ms selection interval makes the
+scanning sequence visible in Proteus.
+
+DOT stays off for one second and on for one second.
+Therefore, although its state changes every second,
+its complete on--off cycle lasts
+\[
+    T_{\mathrm{DOT\ cycle}} = 2~\mathrm{s},
+    \qquad
+    f_{\mathrm{DOT\ blink}} = 0.5~\mathrm{Hz}.
+\]
+
+\subsubsection{Short question: Frequency of the scanning process}
+
+Following the definition in the introduction,
+one complete scan must visit all four displays.
+
+Each display is selected for
+\[
+    T_S = 500~\mathrm{ms} = 0.5~\mathrm{s}.
+\]
+
+Therefore, the complete scanning period is
+\[
+    T_{\mathrm{scan}}
+    = 4T_S
+    = 4 \times 0.5~\mathrm{s}
+    = 2~\mathrm{s}.
+\]
+
+The scanning frequency is
+\[
+    \boxed{
+        f_{\mathrm{scan}}
+        = \frac{1}{T_{\mathrm{scan}}}
+        = \frac{1}{2~\mathrm{s}}
+        = 0.5~\mathrm{Hz}
+    }.
+\]
+
+The display-selection rate is
+\[
+    f_{\mathrm{selection}}
+    = \frac{1}{T_S}
+    = \frac{1}{0.5~\mathrm{s}}
+    = 2~\mathrm{Hz}.
+\]
+
+Thus, TIM2 interrupts occur at 100~Hz, a new
+display is selected twice per second, and the
+complete four-display scanning frequency is
+\textbf{0.5~Hz}.
+
+% ============================================================
+% Replace the existing Exercise 3 subsection with this section.
+% The existing reference to the Exercise 2 schematic is preserved.
+% ============================================================
+\subsection{Exercise 3: Buffered digit selection}
+
+\subsubsection{Objective and circuit}
+
+Exercise 3 introduces an array named \texttt{led\_buffer}
+and a function named \texttt{update7SEG(int index)}.
+The array stores the digits to display, while the
+function selects a physical display and writes
+its corresponding array value.
+
+The circuit remains the same as in
+Figure~\ref{fig:ex02}. PB0--PB6 carry the shared
+segment signals, PA6--PA9 select the four displays,
+and PA4 controls the DOT LEDs. These signals
+remain active low.
+
+The initial buffer contains 1, 2, 3, and 4.
+Display selection remains in the TIM2 callback,
+with the next display selected every 500~ms.
+DOT continues to change state every second.
+
+\subsubsection{Buffer declarations and function prototypes}
+
+The source declares the following variables in
+\texttt{USER CODE BEGIN PV}:
+\begin{itemize}
+    \item \texttt{MAX\_LED} specifies the number of displays.
+    \item \texttt{index\_led} identifies the currently
+          selected display, using indices 0--3.
+    \item \texttt{led\_buffer} stores the four digit values.
+\end{itemize}
+
+\begin{stmcode}{Exercise 3 buffer and function prototypes}
+/* USER CODE BEGIN PV */
+const int MAX_LED = 4;
+int index_led = 0;
+int led_buffer[4] = {1, 2, 3, 4};
+/* USER CODE END PV */
+
+/* USER CODE BEGIN PFP */
+void display7SEG(int num);
+void update7SEG(int index);
+/* USER CODE END PFP */
+\end{stmcode}
+
+The display index and the digit value have different
+roles. For example, \texttt{update7SEG(2)} selects
+the third physical display and reads
+\texttt{led\_buffer[2]}, whose initial value is 3.
+
+\begin{table}[H]
+    \centering
+    \caption{Initial buffer-to-display mapping for Exercise 3}
+    \label{tab:ex03-buffer}
+    \begin{tabular}{cccc}
+        \toprule
+        \textbf{Index} &
+        \textbf{Physical display} &
+        \textbf{Enable pin} &
+        \textbf{Buffer value} \\
+        \midrule
+        0 & First  & PA6 & 1 \\
+        1 & Second & PA7 & 2 \\
+        2 & Third  & PA8 & 3 \\
+        3 & Fourth & PA9 & 4 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{Digit encoding for values 0--9}
+
+The Exercise 2 digit function supports only values
+0--3. In Exercise 3, \texttt{display7SEG()} is
+expanded to support all decimal digits, including
+the value 4 required by the initial buffer.
+
+The function builds a pin mask named
+\texttt{segments\_on}. It first sets all segment
+outputs high, then drives the selected outputs low.
+An unsupported value leaves all segments off.
+
+\begin{stmcode}{Exercise 3 display7SEG function}
+/* Put a number from 0 to 9 on the shared PB0-PB6 segment lines */
+void display7SEG(int num){
+    const uint16_t all_segments =
+        GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 |
+        GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6;
+
+    uint16_t segments_on = 0;
+
+    switch (num)
+    {
+        case 0: /* a b c d e f */
+            segments_on = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
+                          GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5;
+            break;
+
+        case 1: /* b c */
+            segments_on = GPIO_PIN_1 | GPIO_PIN_2;
+            break;
+
+        case 2: /* a b d e g */
+            segments_on = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 |
+                          GPIO_PIN_4 | GPIO_PIN_6;
+            break;
+
+        case 3: /* a b c d g */
+            segments_on = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
+                          GPIO_PIN_3 | GPIO_PIN_6;
+            break;
+
+        case 4: /* b c f g */
+            segments_on = GPIO_PIN_1 | GPIO_PIN_2 |
+                          GPIO_PIN_5 | GPIO_PIN_6;
+            break;
+
+        case 5: /* a c d f g */
+            segments_on = GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3 |
+                          GPIO_PIN_5 | GPIO_PIN_6;
+            break;
+
+        case 6: /* a c d e f g */
+            segments_on = GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3 |
+                          GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6;
+            break;
+
+        case 7: /* a b c */
+            segments_on = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2;
+            break;
+
+        case 8: /* a b c d e f g */
+            segments_on = all_segments;
+            break;
+
+        case 9: /* a b c d f g */
+            segments_on = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
+                          GPIO_PIN_3 | GPIO_PIN_5 | GPIO_PIN_6;
+            break;
+
+        default:
+            break; /* Unsupported number: leave all segments off */
+    }
+
+    /* Common anode: HIGH = segment off, LOW = segment on */
+    HAL_GPIO_WritePin(GPIOB, all_segments, GPIO_PIN_SET);
+
+    if (segments_on != 0)
+    {
+        HAL_GPIO_WritePin(GPIOB, segments_on, GPIO_PIN_RESET);
+    }
+  }
+\end{stmcode}
+
+\subsubsection{Report 1: update7SEG function}
+
+The function first checks that the index is between
+0 and 3. An invalid index causes it to return
+without changing the GPIO outputs.
+
+For a valid index, it disables all four displays
+before updating the shared segment signals.
+The \texttt{switch} statement then reads the
+corresponding buffer value and enables the
+selected display.
+
+Both \texttt{display7SEG()} and
+\texttt{update7SEG()} are defined inside
+\texttt{USER CODE BEGIN 0}.
+
+\begin{stmcode}{Exercise 3 update7SEG function}
+/* Select display index 0, 1, 2, or 3 */
+void update7SEG(int index){
+    if (index < 0 || index >= MAX_LED)
+    {
+        return;
+    }
+
+    /* Disable every display before changing the shared segments */
+    HAL_GPIO_WritePin(
+        GPIOA,
+        GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9,
+        GPIO_PIN_SET
+    );
+
+    switch (index)
+    {
+        case 0:
+            display7SEG(led_buffer[0]);
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+            break;
+
+        case 1:
+            display7SEG(led_buffer[1]);
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+            break;
+
+        case 2:
+            display7SEG(led_buffer[2]);
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+            break;
+
+        case 3:
+            display7SEG(led_buffer[3]);
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+            break;
+
+        default:
+            break;
+    }
+  }
+\end{stmcode}
+
+Disabling all displays before writing the segment
+pattern prevents the previously selected display
+from briefly showing the next digit.
+
+The function selects and updates one display.
+It does not advance \texttt{index\_led} or introduce
+a delay; the callback controls the selection order
+and timing.
+
+\subsubsection{Initialization in main}
+
+After GPIO and TIM2 initialization, the application
+sets DOT high so that its LEDs start off.
+It then calls \texttt{update7SEG(index\_led)}.
+Since \texttt{index\_led} initially equals 0,
+the first display immediately shows
+\texttt{led\_buffer[0]}, which is 1.
+
+TIM2 is then started in interrupt mode.
+
+\begin{stmcode}{Exercise 3 initialization inside main}
+MX_GPIO_Init();
+MX_TIM2_Init();
+
+/* USER CODE BEGIN 2 */
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET); /* DOT off */
+update7SEG(index_led);                              /* Show 1 on display 0 */
+HAL_TIM_Base_Start_IT(&htim2);                       /* Start 10 ms interrupts */
+/* USER CODE END 2 */
+\end{stmcode}
+
+The main loop contains no application processing
+in this exercise.
+
+\subsubsection{Report 2: Timer interrupt callback}
+
+The callback retains two static counters.
+\texttt{scan\_ticks} controls display selection,
+while \texttt{dot\_ticks} controls DOT toggling.
+Both counters advance during each 10-ms TIM2 event.
+
+When \texttt{scan\_ticks} reaches 50, the callback
+increments \texttt{index\_led}. If the index reaches
+\texttt{MAX\_LED}, it returns to 0. The callback
+then invokes \texttt{update7SEG(index\_led)}.
+
+When \texttt{dot\_ticks} reaches 100, the callback
+toggles PA4. The DOT and scanning conditions are
+separate, allowing both tasks to execute during
+the same callback invocation when required.
+
+\begin{stmcode}{Exercise 3 TIM2 callback}
+/* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM2)
+    {
+        static uint8_t scan_ticks = 0;
+        static uint8_t dot_ticks = 0;
+
+        scan_ticks++;
+        dot_ticks++;
+
+        /* Change the DOT LEDs every 100 * 10 ms = 1 second */
+        if (dot_ticks >= 100)
+        {
+            dot_ticks = 0;
+            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+        }
+
+        /* Select the next display every 50 * 10 ms = 500 ms */
+        if (scan_ticks >= 50)
+        {
+            scan_ticks = 0;
+
+            index_led++;
+            if (index_led >= MAX_LED)
+            {
+                index_led = 0;
+            }
+
+            update7SEG(index_led);
+        }
+    }
+}
+/* USER CODE END 4 */
+\end{stmcode}
+
+Unlike Exercise 2, the callback no longer contains
+the individual digit patterns and enable-pin
+selections. Those operations are handled by
+\texttt{update7SEG()}, while the displayed values
+are stored in \texttt{led\_buffer}.
+
+\subsubsection{Expected behavior and buffer testing}
+
+With the initial buffer \texttt{\{1, 2, 3, 4\}},
+the displays are selected in physical order:
+first, second, third, and fourth. Each remains
+selected for 500~ms before the next display is
+enabled. DOT changes state every second.
+
+To test the buffer-based selection, change the
+initializer of \texttt{led\_buffer}, rebuild the
+program, and run the updated firmware in Proteus.
+The following cases provide expected results.
+
+\begin{table}[H]
+    \centering
+    \caption{Suggested buffer tests for Exercise 3}
+    \label{tab:ex03-tests}
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Buffer initializer} &
+        \textbf{Expected digits, first to fourth} \\
+        \midrule
+        \texttt{\{1, 2, 3, 4\}} & 1, 2, 3, 4 \\
+        \texttt{\{4, 3, 2, 1\}} & 4, 3, 2, 1 \\
+        \texttt{\{9, 0, 5, 8\}} & 9, 0, 5, 8 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Changing the buffer changes the digit assigned to
+each display. The physical selection order,
+selection interval, and DOT timing remain the same.
+% ============================================================
+% ============================================================
+% Replace the existing Exercise 4 subsection with this section.
+% ============================================================
+\subsection{Exercise 4: One complete scan per second}
+
+\subsubsection{Objective and circuit}
+
+Exercise 4 changes the display-selection interval
+so that one complete scan of all four seven-segment
+displays occurs every second. The required complete
+scanning frequency is therefore 1~Hz.
+DOT continues to change state every second.
+
+The circuit remains the same as in
+Figure~\ref{fig:ex02}. The GPIO assignments and
+the implementations of \texttt{display7SEG()}
+and \texttt{update7SEG()} are unchanged from
+Exercise 3.
+
+The source retains the following buffer declarations.
+
+\begin{stmcode}{Exercise 4 display buffer}
+/* USER CODE BEGIN PV */
+const int MAX_LED = 4;
+int index_led = 0;
+int led_buffer[4] = {1, 2, 3, 4};
+/* USER CODE END PV */
+\end{stmcode}
+
+The displayed values remain 1, 2, 3, and 4.
+The change from Exercise 3 is the scanning interval:
+each display is now selected for 250~ms instead
+of 500~ms.
+
+\subsubsection{Required scan timing}
+
+TIM2 retains its 10-ms interrupt interval.
+The following calculation determines how often
+the callback must select the next display.
+
+\paragraph{Step 1: Determine the complete scanning period.}
+
+The required scanning frequency is
+\[
+    f_{\mathrm{scan}} = 1~\mathrm{Hz}.
+\]
+
+Therefore,
+\[
+    T_{\mathrm{scan}}
+    = \frac{1}{f_{\mathrm{scan}}}
+    = 1~\mathrm{s}
+    = 1000~\mathrm{ms}.
+\]
+
+\paragraph{Step 2: Determine the interval for one display.}
+
+One complete scan contains four display-selection
+intervals. Each display must therefore remain
+selected for
+\[
+    T_S
+    = \frac{T_{\mathrm{scan}}}{4}
+    = \frac{1000~\mathrm{ms}}{4}
+    = 250~\mathrm{ms}.
+\]
+
+\paragraph{Step 3: Determine the callback counter threshold.}
+
+Since each TIM2 event occurs every 10~ms,
+the required number of interrupts is
+\[
+    N_{\mathrm{scan}}
+    = \frac{250~\mathrm{ms}}{10~\mathrm{ms}}
+    = 25.
+\]
+
+Thus, the scanning condition changes from
+\texttt{scan\_ticks >= 50} in Exercise 3 to
+\texttt{scan\_ticks >= 25} in Exercise 4.
+
+\paragraph{Step 4: Verify the complete scanning frequency.}
+
+The four display intervals give
+\[
+    T_{\mathrm{scan}}
+    = 4 \times 250~\mathrm{ms}
+    = 1000~\mathrm{ms}
+    = 1~\mathrm{s}.
+\]
+
+Therefore,
+\[
+    \boxed{
+        f_{\mathrm{scan}}
+        = \frac{1}{1~\mathrm{s}}
+        = 1~\mathrm{Hz}
+    }.
+\]
+
+The callback selects a new display four times
+per second. Each individual display is visited
+once per second.
+
+\subsubsection{Initialization in main}
+
+Initialization remains the same as in Exercise 3.
+DOT starts off, the first display immediately
+shows \texttt{led\_buffer[0]}, and TIM2 is
+started in interrupt mode.
+
+\begin{stmcode}{Exercise 4 initialization inside main}
+MX_GPIO_Init();
+MX_TIM2_Init();
+
+/* USER CODE BEGIN 2 */
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET); /* DOT off */
+update7SEG(index_led);                              /* Show 1 on display 0 */
+HAL_TIM_Base_Start_IT(&htim2);                       /* Start 10 ms interrupts */
+/* USER CODE END 2 */
+\end{stmcode}
+
+The main loop contains no application processing.
+Display selection and DOT toggling remain in
+the timer callback.
+
+\subsubsection{Report 1: Timer interrupt callback}
+
+The callback uses two static counters:
+\texttt{scan\_ticks} for display selection and
+\texttt{dot\_ticks} for DOT toggling. Both
+counters advance on each TIM2 event.
+
+The DOT threshold remains 100 interrupts.
+The scanning threshold is reduced to 25 interrupts.
+
+\begin{stmcode}{Exercise 4 TIM2 callback}
+/* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM2)
+    {
+        static uint8_t scan_ticks = 0;
+        static uint8_t dot_ticks = 0;
+
+        scan_ticks++;
+        dot_ticks++;
+
+        /* Change the DOT LEDs every 100 * 10 ms = 1 second */
+        if (dot_ticks >= 100)
+        {
+            dot_ticks = 0;
+            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+        }
+
+        /* Select the next display every 25 * 10 ms = 250 ms */
+        if (scan_ticks >= 25)
+        {
+            scan_ticks = 0;
+
+            index_led++;
+            if (index_led >= MAX_LED)
+            {
+                index_led = 0;
+            }
+
+            update7SEG(index_led);
+        }
+    }
+}
+/* USER CODE END 4 */
+\end{stmcode}
+
+When \texttt{scan\_ticks} reaches 25, it resets
+to zero. The callback advances \texttt{index\_led},
+returns it to zero when it reaches 4, and calls
+\texttt{update7SEG(index\_led)}.
+
+The selected indices repeat in the order
+\[
+    0 \rightarrow 1 \rightarrow 2 \rightarrow 3
+    \rightarrow 0.
+\]
+
+The \texttt{update7SEG()} function disables all
+four displays before changing the shared segment
+pattern, then enables the selected display.
+
+The DOT and scanning conditions are separate
+\texttt{if} statements. Every 100 interrupts,
+both conditions are satisfied in the same callback
+invocation. The source toggles DOT first and
+then selects the next display.
+
+\subsubsection{Expected simulation behavior}
+
+The first display shows 1 immediately after
+initialization. Every 250~ms, the next display
+is selected. After one second, the selection
+returns to the first display.
+
+\begin{table}[H]
+    \centering
+    \caption{Nominal display sequence for Exercise 4}
+    \label{tab:ex04-sequence}
+    \begin{tabular}{llll}
+        \toprule
+        \textbf{Time interval} &
+        \textbf{Enabled display} &
+        \textbf{Digit} &
+        \textbf{DOT state} \\
+        \midrule
+        0--0.25~s    & First, PA6 low  & 1 & Off \\
+        0.25--0.50~s & Second, PA7 low & 2 & Off \\
+        0.50--0.75~s & Third, PA8 low  & 3 & Off \\
+        0.75--1.00~s & Fourth, PA9 low & 4 & Off \\
+        1.00--1.25~s & First, PA6 low  & 1 & On \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Only the selected display is enabled; the other
+digit-enable outputs remain high. DOT remains
+off for one second and on for one second,
+giving a complete blinking cycle of two seconds.
+
+Compared with Exercise 3, the complete scanning
+frequency increases from 0.5~Hz to 1~Hz.
+The TIM2 interrupt interval and DOT timing
+remain unchanged.
+
+The required 1-Hz scan is intentionally slow,
+so the alternating displays remain visible
+in Proteus.
+% ============================================================
+% ============================================================
+% Replace the existing Exercise 5 subsection with this section.
+% ============================================================
+\subsection{Exercise 5: Digital clock HH:MM}
+
+\subsubsection{Objective and inherited configuration}
+
+Exercise 5 displays a 24-hour digital clock.
+The first two displays show the hour, and the
+last two show the minute. Seconds are maintained
+in software but are not displayed.
+
+The circuit remains as shown in Figure~\ref{fig:ex02}.
+GPIO configuration, TIM2 configuration,
+\texttt{display7SEG()}, \texttt{update7SEG()},
+and the timer callback are already established
+in Exercise 4 and are retained.
+
+The callback continues selecting a display every
+250~ms and toggling DOT every second.
+The new clock processing is performed in
+\texttt{main()}.
+
+\subsubsection{Time variables and display buffer}
+
+The previous buffer declaration is replaced with
+a volatile buffer initialized to zero, and three
+time variables are added. The declarations of
+\texttt{MAX\_LED} and \texttt{index\_led} remain
+as in Exercise 4.
+
+\begin{stmcode}{Exercise 5 updated buffer and new time variables}
+volatile int led_buffer[4] = {0, 0, 0, 0};
+
+int hour = 15;
+int minute = 8;
+int second = 50;
+\end{stmcode}
+
+These declarations belong in
+\texttt{USER CODE BEGIN PV}.
+The initial time is 15:08:50.
+
+The buffer is written by the main loop and read
+during interrupt-driven display selection.
+Its declaration uses \texttt{volatile} as in
+the supplied source.
+
+The new function prototype
+\texttt{void updateClockBuffer(void);}
+is added to \texttt{USER CODE BEGIN PFP},
+alongside the existing prototypes.
+
+\subsubsection{Report 1: updateClockBuffer function}
+
+The function converts the hour and minute into
+four decimal digits. Integer division by 10
+extracts the tens digit, while the remainder
+after division by 10 extracts the units digit.
+
+\begin{stmcode}{Exercise 5 updateClockBuffer function}
+void updateClockBuffer(void){
+    led_buffer[0] = hour / 10;    /* Hour tens */
+    led_buffer[1] = hour % 10;    /* Hour ones */
+    led_buffer[2] = minute / 10;  /* Minute tens */
+    led_buffer[3] = minute % 10;  /* Minute ones */
+}
+\end{stmcode}
+
+The definition is placed in
+\texttt{USER CODE BEGIN 0}.
+
+For the initial time 15:08, the function produces
+\texttt{\{1, 5, 0, 8\}}. A single-digit hour
+or minute automatically receives a leading zero.
+For example, 07:05 produces
+\texttt{\{0, 7, 0, 5\}}.
+
+\subsubsection{Initialization}
+
+Initialization follows Exercise 4, with one added
+call to \texttt{updateClockBuffer()} before
+\texttt{update7SEG(index\_led)}.
+
+This fills the initially zeroed buffer with
+\texttt{\{1, 5, 0, 8\}} before the first display
+is enabled and TIM2 is started. DOT still
+starts in the off state.
+
+\subsubsection{Clock update in the main loop}
+
+The previously empty main loop now waits
+approximately one second, increments the seconds,
+handles time rollover, and updates the buffer.
+
+The supplied source places \texttt{HAL\_Delay(1000)}
+before \texttt{second++}, so the initial time
+is retained during the first waiting interval.
+
+\begin{stmcode}{Exercise 5 main loop}
+/* USER CODE BEGIN WHILE */
+while (1) {
+    HAL_Delay(1000); /* Wait approximately 1 second */
+    second++;
+
+    if (second >= 60) {
+      second = 0;
+      minute++;
+    }
+
+    if (minute >= 60) {
+      minute = 0;
+      hour++;
+    }
+
+    if (hour >= 24) {
+      hour = 0;
+    }
+
+    updateClockBuffer();
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+}
+/* USER CODE END 3 */
+\end{stmcode}
+
+When seconds reach 60, they reset to zero and
+the minute increases. When minutes reach 60,
+they reset to zero and the hour increases.
+When hours reach 24, they reset to zero.
+
+The separate conditions allow all required
+rollovers to occur during the same iteration.
+For example, 23:59:59 advances to 00:00:00.
+
+Although \texttt{HAL\_Delay()} blocks progress
+in the main loop, TIM2 interrupts remain enabled.
+The callback therefore continues scanning the
+displays and toggling DOT during the delay.
+
+\subsubsection{Expected behavior}
+
+The clock initially displays 15:08, with
+50 seconds stored internally. After approximately
+ten seconds, the internal time reaches 15:09:00
+and the displayed digits change to 15:09.
+
+The hour and minute digits change when their
+corresponding values advance. Display scanning
+and DOT blinking continue throughout the clock
+update process.
+
+% ============================================================
+% ============================================================
+% Replace the existing Exercise 6 subsection with this section.
+% Only new or changed code is presented.
+% ============================================================
+% ============================================================
+% Replace BOTH existing Exercise 6 and Exercise 7 sections
+% with this complete block.
+% Stop replacing immediately before the Exercise 8 heading.
+% ============================================================
+
+\subsection{Exercise 6: Software timer for the red LED}
+
+\subsubsection{Objective and inherited configuration}
+
+Exercise 6 introduces a software timer to control
+the red LED on PA5 and removes the blocking
+\texttt{HAL\_Delay()} from the clock-processing loop.
+
+The circuit remains as shown in Figure~\ref{fig:ex02}.
+GPIO and TIM2 configuration, the display buffer,
+and the functions \texttt{display7SEG()},
+\texttt{update7SEG()}, and
+\texttt{updateClockBuffer()} are retained
+from Exercise 5.
+
+TIM2 continues generating interrupts every 10~ms.
+The callback advances the software timer, while
+the main loop handles the LED and clock events.
+
+\subsubsection{New variables and software-timer functions}
+
+The following declarations are added to
+\texttt{USER CODE BEGIN PV}.
+
+\begin{stmcode}{Exercise 6 new variables}
+volatile int timer0_counter = 0;
+volatile int timer0_flag = 0;
+const int TIMER_CYCLE = 10;       /* TIM2 period: 10 ms */
+volatile int clock_second_flag = 0;
+\end{stmcode}
+
+\texttt{timer0\_counter} stores the remaining
+number of 10-ms timer events.
+\texttt{timer0\_flag} indicates expiry.
+The separate \texttt{clock\_second\_flag}
+notifies the main loop that one second has passed.
+
+The following functions are added to
+\texttt{USER CODE BEGIN 0}.
+
+\begin{stmcode}{Exercise 6 software-timer functions}
+void setTimer0(int duration)
+{
+    timer0_counter = duration / TIMER_CYCLE;
+    timer0_flag = 0;
+}
+
+void timer_run(void)
+{
+    if (timer0_counter > 0)
+    {
+        timer0_counter--;
+
+        if (timer0_counter == 0)
+        {
+            timer0_flag = 1;
+        }
+    }
+}
+\end{stmcode}
+
+\texttt{setTimer0()} converts a duration in
+milliseconds into timer events and clears the
+previous expiry flag.
+
+\texttt{timer\_run()} decreases a positive
+counter once per callback. When it reaches
+zero, the function raises the flag.
+The main loop performs the LED action.
+
+\subsubsection{Updated timer interrupt callback}
+
+The function
+\texttt{HAL\_TIM\_PeriodElapsedCallback()}
+is modified to call \texttt{timer\_run()}
+and raise \texttt{clock\_second\_flag}.
+
+Display selection and DOT toggling remain
+inside the callback.
+
+\begin{stmcode}{Exercise 6 updated timer callback}
+/* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM2)
+    {
+        static uint8_t scan_ticks = 0;
+        static uint8_t dot_ticks = 0;
+
+        timer_run();    /* Decrease software timer once per 10 ms */
+
+        scan_ticks++;
+        dot_ticks++;
+
+        if (dot_ticks >= 100)
+        {
+            dot_ticks = 0;
+            HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+            clock_second_flag = 1; /* Tell main one second passed */
+        }
+
+        if (scan_ticks >= 25)
+        {
+            scan_ticks = 0;
+
+            index_led++;
+            if (index_led >= MAX_LED)
+            {
+                index_led = 0;
+            }
+
+            update7SEG(index_led);
+        }
+    }
+}
+/* USER CODE END 4 */
+\end{stmcode}
+
+The timer-instance check restricts processing
+to TIM2. Each callback advances timer 0.
+Every 100 callbacks, DOT changes state and
+the clock flag is raised. Every 25 callbacks,
+the next display is selected.
+
+Thus, the clock notification is generated
+by TIM2, while the main loop performs the
+time update.
+
+\subsubsection{Initialization}
+
+The display initialization follows Exercise 5.
+PA5 is also set high so that the red LED starts
+off, and timer 0 is initialized before TIM2 starts.
+
+\begin{stmcode}{Exercise 6 initialization}
+/* USER CODE BEGIN 2 */
+HAL_GPIO_WritePin(
+    GPIOA, GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_SET
+);                         /* DOT and PA5 LED initially off */
+
+updateClockBuffer();
+update7SEG(index_led);      /* Display 0 initially selected */
+
+setTimer0(1000);            /* First PA5 toggle after 1 second */
+HAL_TIM_Base_Start_IT(&htim2);
+/* USER CODE END 2 */
+\end{stmcode}
+
+\subsubsection{Updated main loop}
+
+The main loop checks two independent flags.
+Timer 0 controls the PA5 LED, while
+\texttt{clock\_second\_flag} controls
+the clock update.
+
+\begin{stmcode}{Exercise 6 main loop}
+/* USER CODE BEGIN WHILE */
+while (1) {
+  if (timer0_flag == 1) {
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+    setTimer0(2000);
+  }
+
+  if (clock_second_flag == 1) {
+    clock_second_flag = 0;
+
+    second++;
+
+    if (second >= 60) {
+      second = 0;
+      minute++;
+    }
+
+    if (minute >= 60) {
+      minute = 0;
+      hour++;
+    }
+
+    if (hour >= 24) {
+      hour = 0;
+    }
+
+    updateClockBuffer();
+  }
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+}
+/* USER CODE END 3 */
+\end{stmcode}
+
+The first LED toggle occurs after approximately
+one second. Subsequent toggles occur every
+two seconds because the main loop rearms
+timer 0 with \texttt{setTimer0(2000)}.
+This call also clears its expiry flag.
+
+The clock-rollover logic follows Exercise 5.
+It now executes when the clock flag is raised,
+without a blocking delay.
+
+\subsubsection{Answers to the three report questions}
+
+Each question changes only the initial
+\texttt{setTimer0(1000)} call.
+The later \texttt{setTimer0(2000)} call
+remains unchanged.
+
+\begin{table}[H]
+    \centering
+    \caption{Effect of changing the initial software-timer call}
+    \label{tab:ex06-questions}
+    \begin{tabular}{
+        >{\raggedright\arraybackslash}p{0.28\textwidth}
+        >{\raggedright\arraybackslash}p{0.61\textwidth}}
+        \toprule
+        \textbf{Initial call} &
+        \textbf{Outcome and reason} \\
+        \midrule
+
+        Omitted &
+        The counter and flag remain zero.
+        Since \texttt{timer\_run()} only processes
+        positive counters, no expiry flag is raised.
+        The PA5 LED remains off. \\
+
+        \addlinespace
+        \texttt{setTimer0(1)} &
+        Integer division gives
+        \texttt{1 / 10 = 0}, and the flag is cleared.
+        The zero counter is not decremented,
+        so the flag is never raised.
+        The PA5 LED remains off. \\
+
+        \addlinespace
+        \texttt{setTimer0(10)} &
+        Integer division gives
+        \texttt{10 / 10 = 1}.
+        The next TIM2 callback decrements the
+        counter to zero and raises the flag.
+        The first toggle occurs after approximately
+        10~ms. Subsequent toggles occur every
+        two seconds after rearming. \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+These changes affect the PA5 task.
+Display scanning, DOT blinking, and clock
+updates continue independently of timer 0.
+
+\subsubsection{Expected behavior}
+
+PA5 initially remains off, turns on after
+approximately one second, and then changes
+state every two seconds.
+
+The initial clock time is 15:08:50.
+The displayed time becomes 15:09 after
+approximately ten seconds. Display selection
+continues every 250~ms, and DOT changes
+state every second.
+
+
+% ============================================================
+\subsection{Exercise 7: Clock and DOT handled in main}
+
+\subsubsection{Objective and inherited configuration}
+
+Exercise 7 uses a software timer for the clock
+and moves DOT toggling to the main loop.
+The circuit remains as shown in
+Figure~\ref{fig:ex02}.
+
+GPIO and TIM2 configuration, display functions,
+clock-buffer conversion, and
+\texttt{setTimer0()} are already established
+in the previous exercises and are retained.
+
+In the supplied source, timer 0 is reassigned
+to the one-second clock and DOT task.
+The previous \texttt{clock\_second\_flag}
+is removed.
+
+\subsubsection{Software-timer extension}
+
+The source adds the following declarations
+to \texttt{USER CODE BEGIN PV}.
+
+\begin{stmcode}{Exercise 7 additional timer variables}
+volatile int timer1_counter = 0;
+volatile int timer1_flag = 0;
+\end{stmcode}
+
+The existing timer 0 declarations and
+\texttt{TIMER\_CYCLE} remain unchanged.
+
+A second timer-setting function is added,
+and \texttt{timer\_run()} is extended to
+process both counters.
+
+\begin{stmcode}{Exercise 7 additional timer and updated timer_run}
+void setTimer1(int duration)
+{
+    timer1_counter = duration / TIMER_CYCLE;
+    timer1_flag = 0;
+}
+
+void timer_run(void)
+{
+    if (timer0_counter > 0)
+    {
+        timer0_counter--;
+
+        if (timer0_counter == 0)
+        {
+            timer0_flag = 1;
+        }
+    }
+
+    if (timer1_counter > 0)
+    {
+        timer1_counter--;
+
+        if (timer1_counter == 0)
+        {
+            timer1_flag = 1;
+        }
+    }
+}
+\end{stmcode}
+
+These functions are defined in
+\texttt{USER CODE BEGIN 0}.
+Both timers follow the countdown mechanism
+established in Exercise 6.
+
+\subsubsection{Updated timer interrupt callback}
+
+The function
+\texttt{HAL\_TIM\_PeriodElapsedCallback()}
+is modified again. The DOT counter and
+DOT-toggle block are removed.
+
+The callback now advances the software timers
+and maintains the existing display scan.
+
+\begin{stmcode}{Exercise 7 updated timer callback}
+/* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM2)
+    {
+        static uint8_t scan_ticks = 0;
+
+        timer_run();    /* Count down timer0 and timer1 every 10 ms */
+
+        scan_ticks++;
+        if (scan_ticks >= 25)
+        {
+            scan_ticks = 0;
+
+            index_led++;
+            if (index_led >= MAX_LED)
+            {
+                index_led = 0;
+            }
+
+            update7SEG(index_led);
+        }
+    }
+}
+/* USER CODE END 4 */
+\end{stmcode}
+
+Display selection remains inside the callback
+and occurs every 250~ms.
+Clock updates and DOT toggling are performed
+by the main loop when timer 0 expires.
+
+\subsubsection{Initialization}
+
+Initialization follows Exercise 6, with both
+software timers initially set to 1000~ms.
+
+\begin{stmcode}{Exercise 7 initialization}
+/* USER CODE BEGIN 2 */
+HAL_GPIO_WritePin(
+    GPIOA, GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_SET
+);                          /* DOT and red LED initially off */
+
+updateClockBuffer();
+update7SEG(index_led);       /* Select the first clock digit */
+
+setTimer0(1000);             /* Clock and DOT timer */
+setTimer1(1000);             /* Initialized but not handled in main */
+
+HAL_TIM_Base_Start_IT(&htim2);
+/* USER CODE END 2 */
+\end{stmcode}
+
+\subsubsection{Report 1: Main-loop source code}
+
+The main loop checks \texttt{timer0\_flag}.
+When timer 0 expires, it rearms the timer,
+advances the clock, updates the display buffer,
+and toggles DOT.
+
+\begin{stmcode}{Exercise 7 main loop}
+/* USER CODE BEGIN WHILE */
+while (1) {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    if (timer0_flag == 1) {
+      /* Clear the flag and schedule the next second. */
+      setTimer0(1000);
+
+      second++;
+
+      if (second >= 60) {
+        second = 0;
+        minute++;
+      }
+
+      if (minute >= 60) {
+        minute = 0;
+        hour++;
+      }
+
+      if (hour >= 24) {
+        hour = 0;
+      }
+
+      updateClockBuffer();
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+    }
+  } /* Closes while (1). */
+/* USER CODE END 3 */
+\end{stmcode}
+
+Calling \texttt{setTimer0(1000)} clears the
+expiry flag and schedules the next clock event.
+The rollover logic is retained from Exercise 5.
+
+DOT now changes state during the same
+main-loop iteration as the clock update.
+No \texttt{HAL\_Delay()} is required.
+
+\subsubsection{Expected behavior and timer usage}
+
+The clock starts at 15:08:50 and advances
+approximately once per second. DOT also
+changes state once per second.
+The displayed time becomes 15:09 after
+approximately ten seconds.
+
+In the supplied source, the main loop checks
+only \texttt{timer0\_flag}.
+Timer 1 expires once, and its flag remains
+set because no application task handles it.
+
+The main loop contains no PA5 toggle operation.
+The red LED therefore remains off, while
+timer 0 controls the clock and DOT.
+% ============================================================
+% Replace the existing Exercise 8 subsection with this section.
+% ============================================================
+\subsection{Exercise 8: Software-timer-only TIM2 callback}
+
+\subsubsection{Objective and inherited configuration}
+
+Exercise 8 moves periodic display selection
+from the timer callback to the main loop.
+The interrupt callback now only advances
+the software timers.
+
+The circuit remains as shown in Figure~\ref{fig:ex02}.
+GPIO and TIM2 configuration match Exercise 7.
+
+The functions \texttt{display7SEG()},
+\texttt{update7SEG()}, and
+\texttt{updateClockBuffer()} match exactly
+the same functions in Exercise 7.
+The functions \texttt{setTimer0()} and
+\texttt{setTimer1()} also retain the same logic.
+
+The supplied source assigns the three software
+timers as follows.
+
+\begin{table}[H]
+    \centering
+    \caption{Software-timer assignments for Exercise 8}
+    \label{tab:ex08-timers}
+    \begin{tabular}{
+        p{0.13\textwidth}
+        p{0.31\textwidth}
+        p{0.44\textwidth}}
+        \toprule
+        \textbf{Timer} &
+        \textbf{Task} &
+        \textbf{Duration} \\
+        \midrule
+        Timer 0 & PA5 red LED &
+        1000~ms initially; 2000~ms thereafter \\
+        Timer 1 & Clock update and DOT &
+        1000~ms \\
+        Timer 2 & Display selection &
+        250~ms \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Unlike the supplied Exercise 7 source,
+the clock task now uses timer 1, and the
+PA5 red-LED task is active again.
+
+\subsubsection{Additional software timer}
+
+The following declarations are added to
+\texttt{USER CODE BEGIN PV}.
+All other variable declarations retain
+their values from Exercise 7.
+
+\begin{stmcode}{Exercise 8 additional timer variables}
+volatile int timer2_counter = 0;
+volatile int timer2_flag = 0;
+\end{stmcode}
+
+The new function \texttt{setTimer2()} is
+defined in \texttt{USER CODE BEGIN 0}.
+It follows the same mechanism as
+\texttt{setTimer0()} and \texttt{setTimer1()}
+in Exercise 7.
+
+\begin{stmcode}{Exercise 8 setTimer2 function}
+void setTimer2(int duration) {
+  timer2_counter = duration / TIMER_CYCLE;
+  timer2_flag = 0;
+}
+\end{stmcode}
+
+The timer 0 and timer 1 countdown blocks
+inside \texttt{timer\_run()} retain the
+same logic as Exercise 7. The following
+block is added after them, before the
+function's closing brace.
+
+\begin{stmcode}{Additional timer 2 block inside timer_run}
+if (timer2_counter > 0) {
+  timer2_counter--;
+  if (timer2_counter == 0) {
+    timer2_flag = 1;
+  }
+}
+\end{stmcode}
+
+Thus, each call to \texttt{timer\_run()}
+advances all three software timers and
+raises the corresponding expiry flags.
+
+\subsubsection{Updated timer interrupt callback}
+
+The function
+\texttt{HAL\_TIM\_PeriodElapsedCallback()}
+is changed from Exercise 7.
+The \texttt{scan\_ticks} counter and
+display-selection block are removed.
+
+\begin{stmcode}{Exercise 8 updated timer callback}
+/* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM2)
+    {
+        timer_run();
+    }
+}
+/* USER CODE END 4 */
+\end{stmcode}
+
+The callback checks the timer instance and
+advances the software timers every 10~ms.
+LED toggling, clock updates, and periodic
+display selection are handled in the main loop.
+
+\subsubsection{Initialization}
+
+Initialization matches Exercise 7:
+DOT and PA5 start off, the clock buffer is
+prepared, the first display is selected,
+and timers 0 and 1 are initialized to 1000~ms.
+
+One additional call is inserted after
+\texttt{setTimer1(1000)} and before
+\texttt{HAL\_TIM\_Base\_Start\_IT(\&htim2)}.
+
+\begin{stmcode}{Exercise 8 additional initialization}
+setTimer2(250);  /* Next display selection */
+\end{stmcode}
+
+\subsubsection{Report 1: Main-loop source code}
+
+The main loop now checks three independent
+expiry flags. The clock-rollover logic
+matches Exercise 7, but it is triggered
+by \texttt{timer1\_flag}.
+
+\begin{stmcode}{Exercise 8 main loop}
+/* USER CODE BEGIN WHILE */
+while (1) {
+    /* Red LED: first toggle after 1 s, then every 2 s */
+    if (timer0_flag == 1) {
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+      setTimer0(2000);
+    }
+
+    /* Digital clock and DOT: update every 1 s */
+    if (timer1_flag == 1) {
+      setTimer1(1000);
+
+      second++;
+
+      if (second >= 60) {
+        second = 0;
+        minute++;
+      }
+
+      if (minute >= 60) {
+        minute = 0;
+        hour++;
+      }
+
+      if (hour >= 24) {
+        hour = 0;
+      }
+
+      updateClockBuffer();
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+    }
+
+    /* Seven-segment scan: change display every 250 ms */
+    if (timer2_flag == 1) {
+      setTimer2(250);
+
+      index_led++;
+      if (index_led >= MAX_LED) {
+        index_led = 0;
+      }
+
+      update7SEG(index_led);
+    }
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+}
+/* USER CODE END 3 */
+\end{stmcode}
+
+Each timer-setting call clears its expiry
+flag and schedules the next event.
+
+Timer 2 advances \texttt{index\_led}
+through indices 0--3 and calls
+\texttt{update7SEG(index\_led)}.
+The display-selection function itself
+matches Exercise 7; its periodic invocation
+has moved to the main loop.
+
+The three conditions are separate
+\texttt{if} statements, allowing multiple
+expired tasks to be handled during the
+same loop iteration.
+
+\subsubsection{Expected behavior}
+
+The clock initially displays 15:08 and
+advances approximately once per second.
+DOT changes state with each clock update.
+
+The selected display changes every 250~ms.
+PA5 starts off, toggles after approximately
+one second, and then changes state every
+two seconds.
+
+All tasks run without \texttt{HAL\_Delay()},
+while the TIM2 callback only maintains
+the software-timer countdowns.
+
+
+% ============================================================
+% Replace the existing Exercise 9 and Exercise 10 sections
+% with this complete block. Keep the final \end{document}.
+%
+% Also update the matrix-control GPIO entry in the common
+% hardware table to: PA2, PA3, PA10--PA15.
+% ============================================================
+
+% ============================================================
+% Replace the existing Exercise 9 and Exercise 10 sections
+% with this complete block. Keep the final \end{document}.
+%
+% Updated matrix-control pins: PA2, PA3, PA10--PA15.
+% ============================================================
+
+\subsection{Exercise 9: Display the letter A on an
+8\texorpdfstring{$\times$}{x}8 matrix}
+
+\subsubsection{Objective and inherited configuration}
+
+Exercise 9 adds an $8 \times 8$ LED matrix and
+a ULN2803 column-control stage to display
+a stationary capital A.
+
+The functions \texttt{display7SEG()},
+\texttt{update7SEG()}, \texttt{updateClockBuffer()},
+\texttt{setTimer0()}, \texttt{setTimer1()},
+\texttt{setTimer2()}, and \texttt{timer\_run()}
+match exactly the same functions in Exercise 8.
+
+TIM2 configuration and
+\texttt{HAL\_TIM\_PeriodElapsedCallback()}
+also match Exercise 8. TIM2 continues interrupting
+every 10~ms, and its callback only calls
+\texttt{timer\_run()}.
+
+Matrix scanning is added to the main loop,
+alongside the existing clock and LED tasks.
+
+\subsubsection{Updated matrix GPIO configuration}
+
+The updated circuit connects ENM0 to PA2
+and ENM1 to PA3. The remaining column
+assignments are shown in
+Table~\ref{tab:ex09-matrix-pins}.
+
+\begin{table}[H]
+    \centering
+    \caption{Updated GPIO assignments for the LED matrix}
+    \label{tab:ex09-matrix-pins}
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{Column index} &
+        \textbf{Enable signal} &
+        \textbf{GPIO pin} \\
+        \midrule
+        0 & ENM0 & PA2  \\
+        1 & ENM1 & PA3  \\
+        2 & ENM2 & PA10 \\
+        3 & ENM3 & PA11 \\
+        4 & ENM4 & PA12 \\
+        5 & ENM5 & PA13 \\
+        6 & ENM6 & PA14 \\
+        7 & ENM7 & PA15 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+All column-control signals use GPIOA.
+ROW0--ROW7 connect to PB8--PB15, respectively.
+
+The updated definitions in \texttt{main.h}
+include:
+
+\begin{stmcode}{Updated ENM0 and ENM1 pin definitions}
+#define ENM0_Pin GPIO_PIN_2
+#define ENM0_GPIO_Port GPIOA
+#define ENM1_Pin GPIO_PIN_3
+#define ENM1_GPIO_Port GPIOA
+\end{stmcode}
+
+The generated \texttt{MX\_GPIO\_Init()} function
+uses these pin definitions to configure
+the matrix outputs as push-pull, with
+no internal pull resistors and an initial
+HIGH output level.
+
+The matrix-display function also uses
+the ENM pin definitions. GPIO initialization
+and column selection therefore follow
+the same mapping.
+
+In the implemented circuit, HIGH on an
+ENM output disables its column, while LOW
+selects it. For the selected column,
+a LOW row output lights the corresponding
+pixel and a HIGH row output turns it off.
+
+\subsubsection{Report 1: Schematic}
+
+\begin{figure}[H]
+    \centering
+    \schematicplaceholder{figures/pic03.png}{0.92}
+    \caption{Exercise 9 Proteus circuit with the
+    8$\times$8 LED matrix and ULN2803.}
+    \label{fig:ex09}
+\end{figure}
+
+\subsubsection{Matrix variables and character pattern}
+
+The following declarations are added inside
+\texttt{USER CODE BEGIN PV}.
+The existing clock, display-buffer, and
+software-timer variables match Exercise 8.
+
+\begin{stmcode}{Exercise 9 matrix variables and smaller A}
+const int MAX_LED_MATRIX = 8;
+int index_led_matrix = 0;
+
+/* Smaller A: 5 columns wide, 6 rows tall, with blank margins */
+uint8_t matrix_buffer[8] = {
+    0x00, 0x7C, 0x12, 0x12,
+    0x12, 0x7C, 0x00, 0x00
+};
+
+uint32_t last_matrix_scan = 0;
+\end{stmcode}
+
+Each buffer element represents one column.
+Its eight bits specify the pixels on
+ROW0--ROW7. Bit 0 corresponds to PB8,
+and bit 7 corresponds to PB15.
+
+A stored bit value of 1 represents a lit
+pixel and produces a LOW row output.
+A stored bit value of 0 produces a HIGH
+row output.
+
+The A occupies five columns and six rows.
+The remaining positions provide blank margins.
+
+\subsubsection{Report 2: updateLEDMatrix function}
+
+The function \texttt{updateLEDMatrix()}
+is defined inside \texttt{USER CODE BEGIN 0}.
+It checks the index, disables all columns,
+writes the row pattern, and enables the
+selected column.
+
+\begin{stmcode}{Exercise 9 updateLEDMatrix function}
+void updateLEDMatrix(int index) {
+  const uint16_t all_columns = ENM0_Pin | ENM1_Pin | ENM2_Pin | ENM3_Pin |
+                               ENM4_Pin | ENM5_Pin | ENM6_Pin | ENM7_Pin;
+
+  uint16_t selected_column;
+
+  if (index < 0 || index >= MAX_LED_MATRIX) {
+    return;
+  }
+
+  /* Disable all columns before changing the row data. */
+  HAL_GPIO_WritePin(GPIOA, all_columns, GPIO_PIN_SET);
+
+  /* Update the eight active-low row outputs. */
+  for (int row = 0; row < 8; row++) {
+    uint16_t row_pin = (uint16_t)(GPIO_PIN_8 << row);
+
+    GPIO_PinState row_state = (matrix_buffer[index] & (1U << row))
+                                  ? GPIO_PIN_RESET /* Pixel ON */
+                                  : GPIO_PIN_SET;  /* Pixel OFF */
+
+    HAL_GPIO_WritePin(GPIOB, row_pin, row_state);
+  }
+
+  /* Select the column using the definitions in main.h. */
+  switch (index) {
+  case 0:
+    selected_column = ENM0_Pin; /* PA2 */
+    break;
+
+  case 1:
+    selected_column = ENM1_Pin; /* PA3 */
+    break;
+
+  case 2:
+    selected_column = ENM2_Pin; /* PA10 */
+    break;
+
+  case 3:
+    selected_column = ENM3_Pin; /* PA11 */
+    break;
+
+  case 4:
+    selected_column = ENM4_Pin; /* PA12 */
+    break;
+
+  case 5:
+    selected_column = ENM5_Pin; /* PA13 */
+    break;
+
+  case 6:
+    selected_column = ENM6_Pin; /* PA14 */
+    break;
+
+  case 7:
+    selected_column = ENM7_Pin; /* PA15 */
+    break;
+
+  default:
+    return;
+  }
+
+  /* Enable only the selected column: active LOW. */
+  HAL_GPIO_WritePin(GPIOA, selected_column, GPIO_PIN_RESET);
+}
+\end{stmcode}
+
+Both the all-column mask and the selection
+cases use \texttt{ENM0\_Pin}--\texttt{ENM7\_Pin}.
+Column 0 selects PA2, and column 1 selects PA3.
+
+The row loop uses consecutive GPIO pins
+PB8--PB15. Disabling every column before
+changing these outputs prevents the previous
+column from briefly displaying the next
+column's pattern.
+
+\subsubsection{Complete application initialization}
+
+After the existing GPIO and TIM2 initialization,
+the application prepares the clock, initializes
+the three software timers, and starts TIM2.
+It then selects the initial matrix column
+and records the matrix-scan timestamp.
+
+\begin{stmcode}{Exercise 9 initialization inside main}
+/* USER CODE BEGIN 2 */
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_SET);
+
+updateClockBuffer();
+update7SEG(index_led); /* Show the first digit immediately */
+
+setTimer0(1000); /* PA5's first toggle */
+setTimer1(1000); /* Next clock second and DOT toggle */
+setTimer2(250);  /* Next display selection */
+
+HAL_TIM_Base_Start_IT(&htim2);
+
+updateLEDMatrix(index_led_matrix);
+last_matrix_scan = HAL_GetTick();
+/* USER CODE END 2 */
+\end{stmcode}
+
+The initial matrix index is zero, so the
+first selected column is ENM0 on PA2.
+
+\subsubsection{Complete main loop}
+
+The complete loop below includes all inherited
+tasks and the new matrix-scanning task.
+The red-LED, clock, DOT, and seven-segment
+processing follows Exercise 8.
+
+\begin{stmcode}{Exercise 9 complete main loop}
+/* USER CODE BEGIN WHILE */
+while (1) {
+    /* Red LED: first toggle after 1 s, then every 2 s */
+    if (timer0_flag == 1) {
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+      setTimer0(2000);
+    }
+
+    /* Digital clock and DOT: update every 1 s */
+    if (timer1_flag == 1) {
+      setTimer1(1000);
+
+      second++;
+
+      if (second >= 60) {
+        second = 0;
+        minute++;
+      }
+
+      if (minute >= 60) {
+        minute = 0;
+        hour++;
+      }
+
+      if (hour >= 24) {
+        hour = 0;
+      }
+
+      updateClockBuffer();
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+    }
+
+    /* Seven-segment scan: change display every 250 ms */
+    if (timer2_flag == 1) {
+      setTimer2(250);
+
+      index_led++;
+      if (index_led >= MAX_LED) {
+        index_led = 0;
+      }
+
+      update7SEG(index_led);
+    }
+
+    /* Exercise 09: change matrix column every 5 ms */
+    uint32_t now = HAL_GetTick();
+
+    if ((uint32_t)(now - last_matrix_scan) >= 5U) {
+      last_matrix_scan = now;
+
+      index_led_matrix++;
+      if (index_led_matrix >= MAX_LED_MATRIX) {
+        index_led_matrix = 0;
+      }
+
+      updateLEDMatrix(index_led_matrix);
+    }
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+}
+/* USER CODE END 3 */
+\end{stmcode}
+
+Timer 0 controls PA5, timer 1 controls the
+clock and DOT, and timer 2 controls
+seven-segment display selection.
+
+Matrix scanning uses the HAL millisecond
+time base. The comparison with \texttt{5U}
+selects a nominal 5-ms column interval.
+The index advances through columns 0--7
+and returns to zero after column 7.
+
+The stored A pattern remains unchanged.
+The GPIO outputs retain each selected
+column and its row pattern between updates.
+No \texttt{HAL\_Delay()} is used.
+
+\subsubsection{Expected behavior}
+
+The smaller A remains stationary while
+its columns are repeatedly scanned.
+
+The clock advances approximately once
+per second, DOT changes state every second,
+and the selected seven-segment display
+changes every 250~ms.
+
+PA5 starts off, toggles after approximately
+one second, and then changes state every
+two seconds.
+
+
+% ============================================================
+\subsection{Exercise 10: Scroll the matrix character to the left}
+
+\subsubsection{Objective and inherited configuration}
+
+Exercise 10 adds left-scrolling movement
+to the A displayed in Exercise 9.
+
+The circuit remains as shown in
+Figure~\ref{fig:ex09}. GPIO assignments
+match Table~\ref{tab:ex09-matrix-pins}:
+ENM0 uses PA2, ENM1 uses PA3, and
+ENM2--ENM7 use PA10--PA15.
+
+The \texttt{updateLEDMatrix()} function,
+initial matrix buffer, clock functions,
+software-timer functions, GPIO initialization,
+and \texttt{HAL\_TIM\_PeriodElapsedCallback()}
+match exactly the corresponding parts
+in Exercise 9.
+
+Column scanning retains its 5-ms interval.
+The new animation uses a nominal 200-ms
+movement interval.
+
+\subsubsection{Additional animation variables}
+
+The matrix declarations from Exercise 9
+are retained. The following declarations
+are added inside \texttt{USER CODE BEGIN PV}.
+
+\begin{stmcode}{Exercise 10 animation variables and source pattern}
+uint32_t last_matrix_animation = 0;
+int matrix_scroll_offset = 0;
+
+/* Small A with margins, followed by eight blank columns */
+const uint8_t scrolling_pattern[16] = {
+    0x00, 0x7C, 0x12, 0x12,
+    0x12, 0x7C, 0x00, 0x00,
+
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00
+};
+\end{stmcode}
+
+The first eight source bytes match the
+initial A frame from Exercise 9.
+The next eight bytes provide blank columns
+between successive appearances of the character.
+
+The matrix displays an eight-column window
+from this 16-column source.
+\texttt{matrix\_scroll\_offset} determines
+the starting position of that window.
+
+\subsubsection{Report 1: Left-scrolling function}
+
+The new function \texttt{scrollMatrixLeft()}
+is defined inside \texttt{USER CODE BEGIN 0}.
+
+\begin{stmcode}{Exercise 10 scrollMatrixLeft function}
+void scrollMatrixLeft(void) {
+  matrix_scroll_offset++;
+
+  if (matrix_scroll_offset >= 16) {
+    matrix_scroll_offset = 0;
+  }
+
+  for (int col = 0; col < MAX_LED_MATRIX; col++) {
+    int source = (col + matrix_scroll_offset) % 16;
+    matrix_buffer[col] = scrolling_pattern[source];
+  }
+}
+\end{stmcode}
+
+Each call advances the viewing-window offset
+by one and rebuilds all eight display columns.
+Each physical column receives the next source
+column, making the visible character move left.
+
+The modulo operation wraps the viewing
+window around the 16-column source.
+After 16 movements, the initial position repeats.
+
+The function changes the buffer contents.
+The inherited \texttt{updateLEDMatrix()}
+function displays those contents using
+the updated ENM pin definitions.
+
+\subsubsection{Complete application initialization}
+
+Initialization follows Exercise 9, with
+the animation timestamp initialized from
+the matrix-scan timestamp.
+
+\begin{stmcode}{Exercise 10 initialization inside main}
+/* USER CODE BEGIN 2 */
+HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_5, GPIO_PIN_SET);
+
+updateClockBuffer();
+update7SEG(index_led); /* Show the first digit immediately */
+
+setTimer0(1000); /* PA5's first toggle */
+setTimer1(1000); /* Next clock second and DOT toggle */
+setTimer2(250);  /* Next display selection */
+
+HAL_TIM_Base_Start_IT(&htim2);
+
+updateLEDMatrix(index_led_matrix);
+last_matrix_scan = HAL_GetTick();
+
+last_matrix_animation = last_matrix_scan;
+/* USER CODE END 2 */
+\end{stmcode}
+
+The scroll offset initially equals zero.
+The initial buffer therefore shows the same
+A position as Exercise 9.
+
+\subsubsection{Complete main loop}
+
+The complete loop retains all inherited
+tasks and adds animation inside the
+matrix-scanning block.
+
+\begin{stmcode}{Exercise 10 complete main loop}
+/* USER CODE BEGIN WHILE */
+while (1) {
+    /* Red LED: first toggle after 1 s, then every 2 s */
+    if (timer0_flag == 1) {
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+      setTimer0(2000);
+    }
+
+    /* Digital clock and DOT: update every 1 s */
+    if (timer1_flag == 1) {
+      setTimer1(1000);
+
+      second++;
+
+      if (second >= 60) {
+        second = 0;
+        minute++;
+      }
+
+      if (minute >= 60) {
+        minute = 0;
+        hour++;
+      }
+
+      if (hour >= 24) {
+        hour = 0;
+      }
+
+      updateClockBuffer();
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+    }
+
+    /* Seven-segment scan: change display every 250 ms */
+    if (timer2_flag == 1) {
+      setTimer2(250);
+
+      index_led++;
+      if (index_led >= MAX_LED) {
+        index_led = 0;
+      }
+
+      update7SEG(index_led);
+    }
+
+    uint32_t now = HAL_GetTick();
+
+    /* Scan one matrix column every 5 ms */
+    if ((uint32_t)(now - last_matrix_scan) >= 5U) {
+      last_matrix_scan = now;
+
+      index_led_matrix++;
+      if (index_led_matrix >= MAX_LED_MATRIX) {
+        index_led_matrix = 0;
+      }
+
+      /* Move A at the beginning of a complete scan */
+      if (index_led_matrix == 0 &&
+          (uint32_t)(now - last_matrix_animation) >= 200U) {
+
+        last_matrix_animation += 200U;
+        scrollMatrixLeft();
+      }
+
+      updateLEDMatrix(index_led_matrix);
+    }
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+}
+/* USER CODE END 3 */
+\end{stmcode}
+
+The red-LED, clock, DOT, and seven-segment
+blocks retain the behavior of Exercise 9.
+
+The outer matrix condition controls the
+5-ms column interval. The inner condition
+allows movement when the animation deadline
+has been reached and the next displayed
+column is column 0.
+
+The buffer is updated immediately before
+displaying column 0 through ENM0 on PA2.
+It remains unchanged while the remaining
+columns of that scan are displayed.
+This prevents the character position from
+changing halfway through a complete scan.
+
+The statement
+\texttt{last\_matrix\_animation += 200U}
+advances the scheduled movement time
+by a fixed interval. Actual movement occurs
+at the first eligible beginning of a scan.
+
+Scanning and animation both remain in
+the main loop. The TIM2 callback continues
+calling only \texttt{timer\_run()}.
+
+\subsubsection{Expected behavior}
+
+The smaller A begins in the same position
+as in Exercise 9. It moves left one column
+at a time, leaves the display, passes through
+the blank portion of the source, and re-enters
+from the right.
+
+The character keeps its original shape.
+The clock, DOT, PA5 red LED, and seven-segment
+tasks continue operating during the animation,
+without a blocking delay.
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\begin{thebibliography}{9}
+\raggedright
+
+\bibitem{lab02-repository}
+V. L. T. Trieu,
+\textit{Lab 02 code + schematic}, GitHub repository. [Online]. Available:
+\url{https://github.com/volethanhtrieu/Lab-exercise-MPU---MCU/tree/main/lab02}.
+
+\bibitem{lab02-manual}
+Ho Chi Minh City University of Technology,
+\textit{Microcontroller Laboratory -- Lab 02: Timer Interrupt and LED Scanning},
+course laboratory manual.
+
+\bibitem{stm32f103-datasheet}
+STMicroelectronics,
+\textit{STM32F103x4 and STM32F103x6 Low-density Performance Line Datasheet},
+DocID15060, Rev. 7, June 2015. [Online]. Available:
+\url{https://www.st.com/resource/en/datasheet/stm32f103c4.pdf}.
+[Accessed: September 18, 2026].
+
+\bibitem{stm32cubemx}
+STMicroelectronics,
+\textit{STM32CubeMX: STM32Cube Initialization Code Generator}. [Online].
+Available: \url{https://www.st.com/en/development-tools/stm32cubemx.html}.
+[Accessed: September 18, 2026].
+
+\bibitem{stm32cubef1}
+STMicroelectronics,
+\textit{STM32CubeF1 Embedded Software Package}. [Online]. Available:
+\url{https://www.st.com/en/embedded-software/stm32cubef1.html}.
+[Accessed: September 18, 2026].
+
+\bibitem{proteus-simulation}
+Labcenter Electronics,
+\textit{Proteus Circuit Simulation Software with SPICE}. [Online]. Available:
+\url{https://www.labcenter.com/simulation/}.
+[Accessed: September 18, 2026].
+
+\end{thebibliography}
+\end{document}
